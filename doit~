@@ -1,0 +1,3 @@
+  571  git add --all
+  572  git commit -m "Test of index.html"
+  573  git push -u origin master
