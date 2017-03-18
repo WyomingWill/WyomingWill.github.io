@@ -23,6 +23,7 @@ to setup                                                ; Clear everything
    set center_of_mass_y (sum [ycor * mass] of particles) / (sum [mass] of particles)
    ask patch (round center_of_mass_x) (round center_of_mass_y)
       [ask patches in-radius 6 [set pcolor yellow]]     ; Initial center of mass is displayed in yellow
+   reset-ticks
 end
 
 to run-and-monitor
@@ -196,7 +197,6 @@ to one-is-born
                          (ycor + (random-normal 0 0.1))]]
    ] 
 end
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 298
@@ -223,6 +223,7 @@ GRAPHICS-WINDOW
 1
 1
 ticks
+30.0
 
 BUTTON
 8
@@ -239,6 +240,7 @@ NIL
 S
 NIL
 NIL
+1
 
 BUTTON
 115
@@ -255,6 +257,7 @@ NIL
 M
 NIL
 NIL
+1
 
 SLIDER
 11
@@ -345,10 +348,11 @@ NIL
 10.0
 true
 false
+"" ""
 PENS
-"Lmx" 1.0 0 -2674135 true
-"Lmy" 1.0 0 -10899396 true
-"Angular" 1.0 0 -13345367 true
+"Lmx" 1.0 0 -2674135 true "" ""
+"Lmy" 1.0 0 -10899396 true "" ""
+"Angular" 1.0 0 -13345367 true "" ""
 
 SLIDER
 9
@@ -380,6 +384,7 @@ NIL
 K
 NIL
 NIL
+1
 
 BUTTON
 10
@@ -396,6 +401,7 @@ NIL
 B
 NIL
 NIL
+1
 
 MONITOR
 10
@@ -423,6 +429,7 @@ NIL
 C
 NIL
 NIL
+1
 
 SLIDER
 9
@@ -491,18 +498,16 @@ After clicking \"Move Agents\", move the mouse into the black graphics\n        
 1
 
 @#$#@#$#@
-WHAT IS IT?
------------
+## WHAT IS IT?
+
 This is an extension of "formation_newton.nlogo," for the book entitled "Physicomimetics: Physics-Based Swarm Intelligence."
 
+## HOW IT WORKS
 
-HOW IT WORKS
-------------
 Multiple particles use F = ma and an elliptical "split Newtonian" force law to self-organize into chain formations. 
 
+## WHAT IS NEW
 
-WHAT IS NEW
------------
 This is the second simulation for Chapter 4 of the book, which pushes the envelope of physicomimetics.  This simulation creates chain formations using a simple and elegant change to the standard physicomimetics model.
 
 In the previous simulations we assume that the force laws are "circularly symmetric," which means that the force is the same regardless of direction. If we want chain formations, it is possible to create them using force laws that are elliptical rather than circular. In this implementation the major axis of the ellipse is aligned with the heading of the particle (robot).
@@ -513,9 +518,8 @@ You can place obstacles in the environment with your mouse, to create an obstacl
 
 A MAX DISTANCE monitor shows the distance between the two particles that are farthest from each other.  This gives an indication of how straight (or curved) the chain formation is.
 
+## HOW TO USE IT
 
-HOW TO USE IT
--------------
 Click SETUP AGENTS to initialize the particles, and click MOVE AGENTS to have them move.
 
 The CLEAR button will erase the particle paths, which becomes handy when particles have their pens down (more on this below).
@@ -530,9 +534,8 @@ Obstacles can be placed in the environment by placing the mouse where you want t
 
 All other sliders will affect the simulation when it is running.
 
+## THINGS TO NOTICE
 
-THINGS TO NOTICE
-----------------
 Particles are initialized in a random cluster in the middle of the graphics pane, and self-organize into a chain formation. First, the particles collapse into a small linear structure. The orientation of that structure depends on the initial positions of the particles. Then the small structure slowly expands into a chain. The behavior is quite emergent.
 
 The POWER controls the value of "p" in the generalized law. The DESIRED_SEPARATION is the desired distance between neighboring particles. The gravitational constant is computed automatically, using the theory established in Chapter 3.
@@ -545,9 +548,8 @@ The large yellow circle in the simulation shows the initial center of mass of th
 
 This model allows you to add and remove particles. Removing particles allows you to test how robust the system is to particle failure. Adding particles allows you to see how scalable the system is, and illustrates just how nicely new particles are incorporated into the formation. 
 
+## THINGS TO TRY
 
-THINGS TO TRY
--------------
 Add particles and see what happens.  Usually they are incorporated easily into the chain.
 
 Remove particles. What happens and why?
@@ -560,16 +562,14 @@ What happens if you start with a large DESIRED_SEPARATION and then decrease the 
 
 What happens if you start with a small DESIRED_SEPARATION and then increase the value?
 
+## EXTENDING THE MODEL
 
-EXTENDING THE MODEL
--------------------
 Extend the simulation so that it copes with the removal of particles and a decreasing DESIRED_SEPARATION. Chapter 12 will provide some hints.
 
 Note, in order to change any NetLogo simulation, you must have the source code (i.e., "formation_chain.nlogo") downloaded to your computer, as well as NetLogo itself. You can not change the code when you are running the simulation with your browser.
 
+## NETLOGO FEATURES
 
-NETLOGO FEATURES
-----------------
 This simulation allows the user to create new particles and kill existing ones.
 
 Killing a particle is accomplished via a call to the NetLogo procedure "die."
@@ -578,34 +578,31 @@ To create a particle, the "hatch" command is used - this clones an existing part
 
 This simulation makes use of NetLogo mouse events to allow the user to place obstacles in the environment.
 
+## RELATED MODELS
 
-RELATED MODELS
---------------
 This is an extension of "formation_newton.nlogo" to create chain formations.
  
 
-CREDITS AND REFERENCES
-----------------------
+## CREDITS AND REFERENCES
+
 To see the first papers that outlined the work presented in this simulation:
 
 Hettiarachchi, S., Maxim, P., Spears, W. M., and Spears, D. F. (2008) Connectivity of collaborative robots in partially observable domains. In Proceedings of the International Conference on Control, Automation, and Systems.
 
 Maxim, P., Spears, W. M., and Spears, D. F. (2009) Robotic chain formations. In Proceedings of the IFAC Workshop on Networked Robotics.
 
+## HOW TO CITE
 
-HOW TO CITE
------------
-If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:
-- Spears, W. M. and Spears, D. F. (eds.) Physicomimetics: Physics-Based Swarm Intelligence, Springer-Verlag, (2011).
+If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:  
+- Spears, W. M. and Spears, D. F. (eds.) Physicomimetics: Physics-Based Swarm Intelligence, Springer-Verlag, (2011).  
 - Wilensky, U. (1999). NetLogo. http://ccl.northwestern.edu/netlogo/. Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
 
+## COPYRIGHT NOTICE
 
-COPYRIGHT NOTICE
-----------------
 Copyright 2011 William M. Spears. All rights reserved.
 
-Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed:
-a) this copyright notice is included, and
+Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed:  
+a) this copyright notice is included, and  
 b) this model will not be redistributed for profit without permission from William M. Spears. Contact William M. Spears for appropriate licenses for redistribution for profit.
 
 http://www.swarmotics.com
@@ -893,7 +890,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 4.1.3
+NetLogo 5.0
 @#$#@#$#@
 set population 200
 setup

@@ -30,6 +30,7 @@ to setup
                         (([mass] of turtle 0) + ([mass] of turtle 1))
    ask patch (round center_of_mass_x) (round center_of_mass_y)
       [ask patches in-radius 4 [set pcolor red]]
+   reset-ticks
 end
 
 to run-and-monitor
@@ -161,6 +162,7 @@ GRAPHICS-WINDOW
 1
 1
 ticks
+30.0
 
 BUTTON
 25
@@ -177,6 +179,7 @@ NIL
 S
 NIL
 NIL
+1
 
 BUTTON
 138
@@ -193,6 +196,7 @@ NIL
 M
 NIL
 NIL
+1
 
 SLIDER
 10
@@ -283,10 +287,11 @@ NIL
 10.0
 true
 true
+"" ""
 PENS
-"Total" 1.0 0 -6459832 true
-"Potential" 1.0 0 -13345367 true
-"Kinetic" 1.0 0 -10899396 true
+"Total" 1.0 0 -6459832 true "" ""
+"Potential" 1.0 0 -13345367 true "" ""
+"Kinetic" 1.0 0 -10899396 true "" ""
 
 PLOT
 386
@@ -302,8 +307,9 @@ NIL
 10.0
 true
 false
+"" ""
 PENS
-"sep" 1.0 0 -2674135 true
+"sep" 1.0 0 -2674135 true "" ""
 
 MONITOR
 16
@@ -365,18 +371,16 @@ total_angular_mom
 11
 
 @#$#@#$#@
-WHAT IS IT?
------------
+## WHAT IS IT?
+
 This is a model of a two-dimensional spring, for the book entitled "Physicomimetics: Physics-Based Swarm Intelligence."
 
+## HOW IT WORKS
 
-HOW IT WORKS
-------------
 Two particles use F = ma and Hooke's law to move as a spring. But now the spring is given angular momentum, allowing it to spin around the center of mass.
 
+## HOW TO USE IT
 
-HOW TO USE IT
--------------
 Click SETUP AGENTS to initialize the two particles, and click MOVE AGENTS to have them move. 
 
 The MASS_RATIO slider allows you to control the relative masses of the particles at the ends of the spring, at initialization.  Changing this slider while the simulation is running will have no effect. 
@@ -385,9 +389,8 @@ The ANGULAR_MOTION slider allows you to impart a spin to the system at initializ
 
 All other sliders will affect the simulation when it is running.
 
+## THINGS TO NOTICE
 
-THINGS TO NOTICE
-----------------
 This simulation serves to teach you a simple model of a spring, as well as introduce you to more advanced concepts, such as the Conservation of Linear Momentum, Conservation of Angular Momentum, and the Conservation of Energy. This is covered in detail in Chapter 2 of the book. 
 
 Note how raising the TIME_STEP introduces very mild variations into the Conservation of Energy graph.  The total energy is shown in brown, the kinetic energy is in green, and the potential energy is in blue. The total energy stays relatively constant while there is a constant tradeoff between potential and kinetic energy. Watch the simulation - when is kinetic energy high? When is potential energy high?
@@ -398,9 +401,8 @@ The red dot in the simulation shows the center of mass of the system. If the Con
 
 This simulation also includes a monitor for the Angular Momentum and you will see that it does not change over time, unless one of the particles crosses the boundary of the world (re-entering from the other side). Again, this is because the standard physics assumption of an Euclidean geometry has been broken (as explained in Chapter 2).
 
+## THINGS TO TRY
 
-THINGS TO TRY
--------------
 See how the SPRING_CONSTANT changes behavior. 
 
 What happens when you damp the spring with FRICTION? 
@@ -409,46 +411,40 @@ What happens if you make one of the particles heavier by using the MASS_RATIO sl
 
 Try different values of ANGULAR_MOMENTUM (even zero).
 
+## EXTENDING THE MODEL
 
-EXTENDING THE MODEL
--------------------
 Currently, the MASS_RATIO slider is only used during the initialization of the two particles. Hence, changing this slider while the simulation is running will have no effect. Modify the code to monitor this slider always (hint: you can do this in the "update-info" procedure), so that the mass of particle 1 can be changed dynamically.
 
 Introduce a third particle and create a more complex structure that contains three springs. Use different spring constants for the three springs. One way to do this is to initially create three particles (by saying "crt 3"): 0, 1, and 2. Then you will need to modify "setup-turtles" so that it initializes all three particles in an appropriate manner. Finally, the "ap" procedure needs to be modified so that it knows which pair of particles are interacting (0 and 1, 0 and 2, or 1 and 2). You will want to have a different value of "k" for each pair. Impart a spin to the system. What happens? 
 
 Note, in order to change any NetLogo simulation, you must have the source code (i.e., "spring2D.nlogo") downloaded to your computer, as well as NetLogo itself. You can not change the code when you are running the simulation with your browser.
 
-NETLOGO FEATURES
-----------------
+## NETLOGO FEATURES
+
 Since we are using a patch size of one, we wanted the particles to be more visible. This is done with "set size 5" in the code. However, they are still considered to be point particles (with no size) in the simulation.
 
 Note also how the "do-plots" procedure draws the Energy graph and the Separation graph.
 
 NetLogo provides built-in commands to model springs, but for the purposes of this book it is better to see how a spring works from first principles. In fact, one of the core concepts of this book is that the better we understand first principles, the more elegant our solutions will be.
 
+## RELATED MODELS
 
-RELATED MODELS
---------------
 This is our second simulation, which builds on the one-dimensional spring model. It will be generalized more and more throughout the book.
 
+## CREDITS AND REFERENCES
 
-CREDITS AND REFERENCES
-----------------------
+## HOW TO CITE
 
-
-HOW TO CITE
------------
-If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:
-- Spears, William M. and Spears, Diana F. (eds.) Physicomimetics: Physics-Based Swarm Intelligence, Springer-Verlag, (2011).
+If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:  
+- Spears, William M. and Spears, Diana F. (eds.) Physicomimetics: Physics-Based Swarm Intelligence, Springer-Verlag, (2011).  
 - Wilensky, U. (1999). NetLogo. http://ccl.northwestern.edu/netlogo/. Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
 
+## COPYRIGHT NOTICE
 
-COPYRIGHT NOTICE
-----------------
 Copyright 2011 William M. Spears. All rights reserved.
 
-Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed:
-a) this copyright notice is included, and
+Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed:  
+a) this copyright notice is included, and  
 b) this model will not be redistributed for profit without permission from William M. Spears. Contact William M. Spears for appropriate licenses for redistribution for profit.
 
 http://www.swarmotics.com
@@ -736,7 +732,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 4.1.3
+NetLogo 5.0
 @#$#@#$#@
 set population 200
 setup

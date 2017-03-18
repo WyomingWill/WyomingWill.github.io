@@ -43,6 +43,7 @@ to setup
    set center_of_mass_x (sum [xcor * mass] of drones) / (sum [mass] of drones)
    set center_of_mass_y (sum [ycor * mass] of drones) / (sum [mass] of drones)
    ask patch (round center_of_mass_x) (round center_of_mass_y) [set pcolor red] 
+   reset-ticks
 end
 
 to run-dinos                                          ; Runs dinoflagellates
@@ -185,7 +186,6 @@ end
 to toggle-minmax
    if (minimum? != 0) [set minimum? not minimum?]
 end
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 299
@@ -212,6 +212,7 @@ GRAPHICS-WINDOW
 1
 1
 ticks
+30.0
 
 BUTTON
 9
@@ -228,6 +229,7 @@ NIL
 S
 NIL
 NIL
+1
 
 BUTTON
 81
@@ -244,6 +246,7 @@ NIL
 D
 NIL
 NIL
+1
 
 SLIDER
 12
@@ -350,6 +353,7 @@ NIL
 T
 NIL
 NIL
+1
 
 SLIDER
 10
@@ -396,6 +400,7 @@ NIL
 M
 NIL
 NIL
+1
 
 BUTTON
 13
@@ -412,6 +417,7 @@ NIL
 G
 NIL
 NIL
+1
 
 MONITOR
 13
@@ -479,31 +485,28 @@ TEXTBOX
 1
 
 @#$#@#$#@
-WHAT IS IT?
------------
+## WHAT IS IT?
+
 This model is an extension of the "split Newtonian" (formation_newton.nlogo) physics-based model of a swarm, for the book entitled "Physicomimetics: Physics-Based Swarm Intelligence." We consider an application of autonomous surface vehicles (called "drones") that float in the ocean and other bodies of water containing dinoflagellates.   Dinoflagellates are single-celled organisms that are bioluminescent (i.e., they produce light when disturbed). 
 
 We focus on two real-world tasks.  In the first task, a swarm of drones should move towards a goal location, while touching as few dinoflagellates as possible.  This is useful for military applications where stealth is desired. A warship, submarine, or special forces team moving through a bioluminescent "hot spot" can easily generate enough light (by disturbing dinoflagellates) to be seen from high points on a nearby shoreline or via aircraft or satellite. The objective of the drones is to find a path through the dinoflagellates that a larger vehicle can follow, while minimally disturbing the organisms.
 
 On the other hand, many dinoflagellate species are responsible for harmful algal blooms (HABs). HABs can produce neurotoxins that are dangerous to other marine organisms and to people swimming in the water. Hence, our second task is to find a path towards a goal that maximizes the collection of dinoflagellates along the way - for the sake of creating a dinoflagellate density map that can be used to forecast the movement of HABs and warn swimmers away from hazardous areas.
 
+## HOW IT WORKS
 
-HOW IT WORKS
-------------
 Multiple drones use F = ma and a "split Newtonian" force law to self-organize into a triangular lattice and move towards a goal.  Depending on how the simulation is run, the drones can either seek to maximize or minimize their exposure to the dinoflagellates, while moving towards the goal.
 
+## WHAT IS NEW
 
-WHAT IS NEW
------------
 There are two levels of "events" in the simulation.  At the lower level are dinoflagellates that move and leave deposits of chemical toxins in the water.  At the higher level there are aquatic drones that can detect, and track or avoid, the chemical traces.  
 
 This simulation allows you to control the random number "seed." The seed uniquely determines the sequence of random events in the simulation.  Hence, if you run the simulation twice with the same seed, the results will be identical.  This is important when properly designing scientific experiments.
 
 The code automatically computes the proper value for the gravitational constant G, using the theory established in Chapter 3. It also provides theoretical guidance for the magnitude of the force that pulls the swarm towards the goal. 
 
+## HOW TO USE IT
 
-HOW TO USE IT
--------------
 Click SETUP to initialize the drones and the initial positions of the dinoflagellates. Then, click RUN DINOS to make the dinoflagellates move and produce a chemical toxin for 100 time steps. Finally, click MOVE DRONES to have them move through the environment towards the goal. The simulation ends when a drone makes it to the goal.
 
 The NUMBER_OF_DRONES slider allows you to control the number of aquatic drones created at initialization. Changing this slider while the simulation is running will have no effect.
@@ -518,9 +521,8 @@ The TOGGLE GOAL button allows you to toggle the goal force on and off. The defau
 
 The TOGGLE MIN/MAX button allows you to control whether the drones attempt to find a path to the goal that minimizes or maximizes exposure to the toxin. The default is to try to find the maximum path.
 
+## THINGS TO NOTICE
 
-THINGS TO NOTICE
-----------------
 Drones are initialized in a cluster at the top right of the graphics pane, and self-organize into a triangular lattice. The goal is placed at the lower left, in order to make the drones move through as much of the environment as possible.
 
 At each time step, the center of mass of the drones is computed and the location is shown as a red dot on the graphics pane. The sequence of red dots shows the trajectory of the center of mass of the drones.
@@ -529,9 +531,8 @@ The GOAL FORCE THEORY monitor provides an estimate of the strength of the goal f
 
 The AVERAGE CHEMICAL SEEN monitor reports the average amount of chemical toxin measured by the drones.
 
+## THINGS TO TRY
 
-THINGS TO TRY
--------------
 Run the simulation and note how much chemical was measured by the drones.  Then, keeping the random seed the same, click the TOGGLE MIN/MAX button, and rerun the experiment. How much chemical is measured now? 
 
 Repeat the above experiment with different random seeds.
@@ -544,14 +545,14 @@ Try different values for the NUMBER_OF_DRONES.  Does varying the number of drone
 
 Vary the NUMBER_OF_DINOS and determine how this affects performance on the two tasks.
 
-What is the difference between the role played by virtual friction (which is set by the FRICTION slider) and real friction that would be encountered between a drone and the water?    How critical is virtual friction to mission success, and what level is needed for adequate performance?
+What is the difference between the role played by virtual friction (which is set by the FRICTION slider) and real friction that would be encountered between a drone and the water?
+    How critical is virtual friction to mission success, and what level is needed for adequate performance?
 
 In general, can you identify those parameter settings that result in (1) poor, (2) adequate, and (3) excellent performance at each of the two tasks?  Explain why these parameter values lead to better/worse performance.
 
 
+## EXTENDING THE MODEL
 
-EXTENDING THE MODEL
--------------------
 Try adding obstacles, such as buoys to avoid, including obstacles of different sizes and shapes.   See how this increases the difficulty of the tasks.
 
 Introduce currents into the water that affect both the dinoflagellates and the drones.  Run experiments that measure the drones' performance as a function of the spatial and temporal extent, as well as the strength, of the currents.
@@ -560,20 +561,16 @@ Increase the number of agents beyond seven, and then test some of the hypotheses
 
 Note, in order to change any NetLogo simulation, you must have the source code (i.e., "dinos.nlogo") downloaded to your computer, as well as NetLogo itself. You can not change the code when you are running the simulation with your browser.
 
-NETLOGO FEATURES
-----------------
+## NETLOGO FEATURES
 
+## RELATED MODELS
 
-
-RELATED MODELS
---------------
 This is an extension of our generalized split Newtonian force law model, for real-world applications. 
 
 This model provides insight into how we might apply artificial physics for function optimization, which will be shown in "apo.nlogo."
 
+## CREDITS AND REFERENCES
 
-CREDITS AND REFERENCES
-----------------------
 For a discussion of a more real-world faithful simulation of the dinoflagellates and drones (as well as a description of the physical drone), see:
 
 Frey, C. Zarzhitsky, D., Spears, W. M., Spears, D. F., Karlsson, C., Ramos, B., Hamann, J., and Widder, E. (2008) A physicomimetics control framework for swarms of autonomous vehicles. In Proceedings of the Oceans'08 Conference.
@@ -582,20 +579,18 @@ The NetLogo slime mold model is at:
 
 Wilensky, U. (1997). NetLogo Slime model. http://ccl.northwestern.edu/netlogo/models/Slime. Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
 
+## HOW TO CITE
 
-HOW TO CITE
------------
-If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:
-- Spears, W. M. and Spears, D. F. (eds.) Physicomimetics: Physics-Based Swarm Intelligence, Springer-Verlag, (2011).
+If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:  
+- Spears, W. M. and Spears, D. F. (eds.) Physicomimetics: Physics-Based Swarm Intelligence, Springer-Verlag, (2011).  
 - Wilensky, U. (1999). NetLogo. http://ccl.northwestern.edu/netlogo/. Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
 
+## COPYRIGHT NOTICE
 
-COPYRIGHT NOTICE
-----------------
 Copyright 2011 William M. Spears. All rights reserved.
 
-Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed:
-a) this copyright notice is included, and
+Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed:  
+a) this copyright notice is included, and  
 b) this model will not be redistributed for profit without permission from William M. Spears. Contact William M. Spears for appropriate licenses for redistribution for profit.
 
 http://www.swarmotics.com
@@ -883,7 +878,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 4.1.3
+NetLogo 5.0
 @#$#@#$#@
 set population 200
 setup

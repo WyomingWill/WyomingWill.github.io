@@ -23,6 +23,7 @@ to setup
    set center_of_mass_y (sum [ycor * mass] of particles) / (sum [mass] of particles)
    ask patch (round center_of_mass_x) (round center_of_mass_y) 
       [ask patches in-radius 4 [set pcolor red]] 
+   reset-ticks
 end
 
 to run-and-monitor
@@ -235,6 +236,7 @@ GRAPHICS-WINDOW
 1
 1
 ticks
+30.0
 
 BUTTON
 8
@@ -251,6 +253,7 @@ NIL
 S
 NIL
 NIL
+1
 
 BUTTON
 115
@@ -267,6 +270,7 @@ NIL
 M
 NIL
 NIL
+1
 
 SLIDER
 12
@@ -357,10 +361,11 @@ NIL
 10.0
 true
 true
+"" ""
 PENS
-"Lmx" 1.0 0 -2674135 true
-"Lmy" 1.0 0 -10899396 true
-"Angular" 1.0 0 -13345367 true
+"Lmx" 1.0 0 -2674135 true "" ""
+"Lmy" 1.0 0 -10899396 true "" ""
+"Angular" 1.0 0 -13345367 true "" ""
 
 MONITOR
 16
@@ -425,6 +430,7 @@ NIL
 B
 NIL
 NIL
+1
 
 MONITOR
 508
@@ -452,6 +458,7 @@ NIL
 C
 NIL
 NIL
+1
 
 SLIDER
 10
@@ -483,6 +490,7 @@ NIL
 F
 NIL
 NIL
+1
 
 MONITOR
 388
@@ -507,18 +515,16 @@ square_button?
 11
 
 @#$#@#$#@
-WHAT IS IT?
------------
+## WHAT IS IT?
+
 This is an extension of "formation_newton.nlogo," for the book entitled "Physicomimetics: Physics-Based Swarm Intelligence."
 
+## HOW IT WORKS
 
-HOW IT WORKS
-------------
 Multiple particles use F = ma and a "split Newtonian" force law to self-organize into a perfect triangular or square lattice. 
 
+## WHAT IS NEW
 
-WHAT IS NEW
------------
 This is the first simulation for Chapter 4 of the book, which pushes the envelope of physicomimetics.  This simulation creates perfect lattices, by making minor modifications to the existing framework. 
 
 First, we assume that each particle has an attribute assigned to it at initialization. This attribute is composed of two integers: m and n.  This attribute serves to indicate where a particle should be with respect to another particle.
@@ -527,9 +533,8 @@ Second, we require that all particles share a global coordinate system (which wa
 
 Finally, we deliberately break Newton's third law to a small degree, by modifying the force law. We do this to improve performance. The reason this is important is because we want to stress that physicomimetics "mimics" physics, as opposed to merely copying physics.  We are task-driven.  If alterations to standard physics improves performance, that is quite acceptable.
 
+## HOW TO USE IT
 
-HOW TO USE IT
--------------
 Click SETUP AGENTS to initialize the particles, and click MOVE AGENTS to have them move.
 
 The CLEAR button will clear the graphics, which becomes handy when particles have their pens down (more on this below).
@@ -542,8 +547,8 @@ There is also a TOGGLE FORMATION button that allows you to choose between square
 
 All other sliders will affect the simulation when it is running.
 
-THINGS TO NOTICE
-----------------
+## THINGS TO NOTICE
+
 Particles are initialized in a random cluster in the middle of the graphics pane, and self-organize into a perfect square or triangular lattice. 
 
 The GRAVITATIONAL_CONSTANT controls the G parameter in the split Newtonian force law. The POWER controls the value of "p" in the generalized law. The DESIRED_SEPARATION is the desired distance between neighboring particles.
@@ -558,8 +563,8 @@ The red dot in the simulation shows the center of mass of the system. If the Con
 
 This model allows you to add particles. Adding particles allows you to see how scalable the system is, and illustrates just how nicely new particles are incorporated into the lattice. 
 
-THINGS TO TRY
--------------
+## THINGS TO TRY
+
 See how the FRICTION changes behavior. Click SETUP AGENTS, lower the friction, and click MOVE AGENTS.  What happens?  
 
 Similarly, change the GRAVITATIONAL_CONSTANT or the POWER.
@@ -567,14 +572,13 @@ Similarly, change the GRAVITATIONAL_CONSTANT or the POWER.
 Change the DESIRED_SEPARATION while the system is running. Try changing it slowly and then change it quickly. What happens?
 
 Add particles and watch their trajectories.
- 
+   
 See how the G PHASE TRANSITION value is affected when you change the GRAVITATIONAL_CONSTANT, the POWER and the FORCE_MAXIMUM.
 
 Toggle between triangular and square formations.  Note how robust the system is - the formations are torn apart and then self-repair.
 
+## EXTENDING THE MODEL
 
-EXTENDING THE MODEL
--------------------
 Find a more elegant way to compute the (m, n) attribute. 
 
 Consider changing the model so that the (m, n) attribute is swapped between particles, as opposed to having particles move so much.
@@ -585,25 +589,22 @@ Try the Lennard-Jones force law instead.
 
 Note, in order to change any NetLogo simulation, you must have the source code (i.e., "formation_perfect.nlogo") downloaded to your computer, as well as NetLogo itself. You can not change the code when you are running the simulation with your browser.
 
+## NETLOGO FEATURES
 
-NETLOGO FEATURES
-----------------
 This simulation allows the user to create new particles.
 
 To create a particle, the "hatch" command is used - this clones an existing particle and moves it away from the original. Also, the new particle has the "pen down," which means that you will see the path that the particle takes. If the graphics pane becomes too busy, click on the CLEAR button.
 
 This code has two procedures ("attract" and "repulse") where values of arguments are passed to the procedures.
 
+## RELATED MODELS
 
-RELATED MODELS
---------------
 This is an extension of "formation_newton.nlogo" to create perfect lattices.
- 
+   
 Chapter 17 (by Sanza Kazadi) provides alternative mechanisms for creating perfect lattices.  His chapter includes videos of these techniques.
 
+## CREDITS AND REFERENCES
 
-CREDITS AND REFERENCES
-----------------------
 To see the first papers that outlined the work presented in this simulation:
 
 Gordon, D. F., Spears, W. M., Sokolsky, O., and Lee, I. (1999) Distributed spatial control, global monitoring and steering of mobile physical agents. In Proceedings of IEEE International Conference on Information, Intelligence, and Systems.
@@ -612,20 +613,18 @@ Spears, W. M., and Gordon, D. F. (1999) Using Artificial Physics to control agen
 
 The latter paper is the first to show the perfect formations.
 
+## HOW TO CITE
 
-HOW TO CITE
------------
-If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:
-- Spears, W. M. and Spears, D. F. (eds.) Physicomimetics: Physics-Based Swarm Intelligence, Springer-Verlag, (2011).
+If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:  
+- Spears, W. M. and Spears, D. F. (eds.) Physicomimetics: Physics-Based Swarm Intelligence, Springer-Verlag, (2011).  
 - Wilensky, U. (1999). NetLogo. http://ccl.northwestern.edu/netlogo/. Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
 
+## COPYRIGHT NOTICE
 
-COPYRIGHT NOTICE
-----------------
 Copyright 2011 William M. Spears. All rights reserved.
 
-Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed:
-a) this copyright notice is included, and
+Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed:  
+a) this copyright notice is included, and  
 b) this model will not be redistributed for profit without permission from William M. Spears. Contact William M. Spears for appropriate licenses for redistribution for profit.
 
 http://www.swarmotics.com
@@ -913,7 +912,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 4.1.3
+NetLogo 5.0
 @#$#@#$#@
 set population 200
 setup

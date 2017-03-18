@@ -29,6 +29,7 @@ to setup
                         (([mass] of turtle 0) + ([mass] of turtle 1))
    ask patch (round center_of_mass_x) (round center_of_mass_y)
       [ask patches in-radius 4 [set pcolor red]]
+   reset-ticks
 end
 
 to run-and-monitor
@@ -168,6 +169,7 @@ GRAPHICS-WINDOW
 1
 1
 ticks
+30.0
 
 BUTTON
 29
@@ -184,6 +186,7 @@ NIL
 S
 NIL
 NIL
+1
 
 BUTTON
 133
@@ -200,6 +203,7 @@ NIL
 M
 NIL
 NIL
+1
 
 SLIDER
 10
@@ -290,10 +294,11 @@ NIL
 10.0
 true
 true
+"" ""
 PENS
-"Total" 1.0 0 -6459832 true
-"Potential" 1.0 0 -13345367 true
-"Kinetic" 1.0 0 -10899396 true
+"Total" 1.0 0 -6459832 true "" ""
+"Potential" 1.0 0 -13345367 true "" ""
+"Kinetic" 1.0 0 -10899396 true "" ""
 
 PLOT
 6
@@ -309,10 +314,11 @@ NIL
 10.0
 true
 true
+"" ""
 PENS
-"Lmx" 1.0 0 -2674135 true
-"Lmy" 1.0 0 -10899396 true
-"Angular" 1.0 0 -13345367 true
+"Lmx" 1.0 0 -2674135 true "" ""
+"Lmy" 1.0 0 -10899396 true "" ""
+"Angular" 1.0 0 -13345367 true "" ""
 
 MONITOR
 56
@@ -388,6 +394,7 @@ NIL
 C
 NIL
 NIL
+1
 
 MONITOR
 373
@@ -423,18 +430,16 @@ Force on Planet
 11
 
 @#$#@#$#@
-WHAT IS IT?
------------
+## WHAT IS IT?
+
 This is a model of a simple solar system with one sun and one planet, for the book entitled "Physicomimetics: Physics-Based Swarm Intelligence."
 
+## HOW IT WORKS
 
-HOW IT WORKS
-------------
 Two particles use F = ma and Newton's gravitational force law to simulate a planet orbiting a sun.  The sun has a much higher mass than the planet.
 
+## HOW TO USE IT
 
-HOW TO USE IT
--------------
 Click SETUP AGENTS to initialize the sun and planet, and click MOVE AGENTS to have them move. The sun is the yellow dot and the planet is the white dot.
 
 The ANGULAR_MOTION slider allows you to impart a spin to the system at initialization, causing the planet to orbit the sun. The amount of ANGULAR_MOTION has a very large impact on the shape of the orbit. The spin is established very carefully to make sure that there is no linear momentum at initialization. Changing this slider while the simulation is running will have no effect.
@@ -443,9 +448,8 @@ The MASS_OF_SUN slider allows you to control the mass of the sun (the planet has
 
 All other sliders will affect the simulation when it is running.
 
+## THINGS TO NOTICE
 
-THINGS TO NOTICE
-----------------
 This simulation serves to teach you a simple model of a solar system, as well as to continue with more advanced topics, such the Conservation of Linear and Angular Momenta and the Conservation of Energy. This is covered in detail in Chapter 2 of the book. 
 
 There is no random component to this code, so it will run the same way each time, if you don't change the settings. 
@@ -458,9 +462,8 @@ Note how lowering the TIME_STEP causes the total energy monitor to fluctuate les
 
 The red dot in the simulation shows the center of mass of the system. If the Conservation of Linear Momentum holds in both the x- and y-dimensions the red dot will not move. The graph shows that the linear momenta stay extremely close to zero, which is what we should expect if the system is programmed properly. This simulation also includes a monitor for the Angular Momentum and you will see that it does not change over time.  If, however, the planet crosses the boundary of the world (re-entering from the other side) the conservation laws can be broken, because the standard physics assumption of an Euclidean geometry no longer holds (as explained in Chapter 2).
 
+## THINGS TO TRY
 
-THINGS TO TRY
--------------
 See how the GRAVITATIONAL_CONSTANT changes behavior. 
 
 Try different values of ANGULAR_MOMENTUM (even zero). 
@@ -471,16 +474,14 @@ What if you change the MASS_OF_SUN?
 
 It is somewhat hard to set the sliders so that you get orbits that stay within the graphics pane.  If you are running the simulation on your computer directly (by using "solar_system.nlogo") you can increase the pane size by clicking on "settings" and then increasing max-pxcor and max-pycor.
 
+## EXTENDING THE MODEL
 
-EXTENDING THE MODEL
--------------------
 Introduce a second planet. How difficult is it to create a stable solar system?
 
 Note, in order to change any NetLogo simulation, you must have the source code (i.e., "solar_system.nlogo") downloaded to your computer, as well as NetLogo itself. You can not change the code when you are running the simulation with your browser.
 
+## NETLOGO FEATURES
 
-NETLOGO FEATURES
-----------------
 Since we are using a patch size of one, we wanted the particles to be more visible. This is done with "set size 5" in the code. However, they are still considered to be point particles (with no size) in the simulation.
 
 This simulation introduces the "pen down" (pd) command to draw the orbit of the planet. You could make a similar change to the "spring2D" simulation also, if you want. The new CLEAR button allows you to erase this orbit.  
@@ -489,31 +490,28 @@ Note how the "do-plots" procedure draws the Energy graph and the Momenta graph.
 
 Now we can see why we didn't use the built-in NetLogo commands to model springs. By modeling springs from first principles, it was trivial to change the previous two-dimensional spring model to use Newton's gravitational force law instead of Hooke's spring law. Working from first principles allows us to have more flexibility in what we are modeling.
 
+## RELATED MODELS
 
-RELATED MODELS
---------------
 This is our third simulation, which builds on the two-dimensional spring model. It will be generalized more and more throughout the book.
 
+## CREDITS AND REFERENCES
 
-CREDITS AND REFERENCES
-----------------------
 For a similar analysis of potential energy, see:
 
 Spears, W. M., Spears, D. F., Hamann, J., and Heil, R. (2004) Distributed, physics-based control of swarms of vehicles. Autonomous Robots, 17 (2-3).
 
-HOW TO CITE
------------
-If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:
-- Spears, William M. and Spears, Diana F. (eds.) Physicomimetics: Physics-Based Swarm Intelligence, Springer-Verlag, (2011).
+## HOW TO CITE
+
+If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:  
+- Spears, William M. and Spears, Diana F. (eds.) Physicomimetics: Physics-Based Swarm Intelligence, Springer-Verlag, (2011).  
 - Wilensky, U. (1999). NetLogo. http://ccl.northwestern.edu/netlogo/. Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
 
+## COPYRIGHT NOTICE
 
-COPYRIGHT NOTICE
-----------------
 Copyright 2011 William M. Spears. All rights reserved.
 
-Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed:
-a) this copyright notice is included, and
+Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed:  
+a) this copyright notice is included, and  
 b) this model will not be redistributed for profit without permission from William M. Spears. Contact William M. Spears for appropriate licenses for redistribution for profit.
 
 http://www.swarmotics.com
@@ -801,7 +799,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 4.1.3
+NetLogo 5.0
 @#$#@#$#@
 set population 200
 setup

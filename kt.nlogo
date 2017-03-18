@@ -27,6 +27,7 @@ to setup
    setup-plot                                                     ; Initialize the velocity distribution histogram 
    monitor                                                        ; Update the information for the histogram
    compute-stats                                                  ; Compute slope and correlation coefficient of velocity histogram
+   reset-ticks
 end
 
 to setup-patches                                                  ; Setup two vertical walls
@@ -170,6 +171,7 @@ GRAPHICS-WINDOW
 1
 1
 ticks
+30.0
 
 BUTTON
 14
@@ -186,6 +188,7 @@ NIL
 S
 NIL
 NIL
+1
 
 BUTTON
 137
@@ -202,6 +205,7 @@ NIL
 M
 NIL
 NIL
+1
 
 SLIDER
 5
@@ -232,20 +236,21 @@ NIL
 10.0
 true
 false
+"" ""
 PENS
-"pen0" 60.0 1 -16777216 true
-"pen1" 60.0 1 -16777216 true
-"pen2" 60.0 1 -16777216 true
-"pen3" 60.0 1 -16777216 true
-"pen4" 60.0 1 -16777216 true
-"pen5" 60.0 1 -16777216 true
-"pen6" 60.0 1 -16777216 true
-"pen7" 60.0 1 -16777216 true
-"pen8" 60.0 1 -16777216 true
-"pen9" 60.0 1 -16777216 true
-"pen10" 60.0 1 -16777216 true
-"pen11" 60.0 1 -16777216 true
-"pen12" 60.0 1 -16777216 true
+"pen0" 60.0 1 -16777216 true "" ""
+"pen1" 60.0 1 -16777216 true "" ""
+"pen2" 60.0 1 -16777216 true "" ""
+"pen3" 60.0 1 -16777216 true "" ""
+"pen4" 60.0 1 -16777216 true "" ""
+"pen5" 60.0 1 -16777216 true "" ""
+"pen6" 60.0 1 -16777216 true "" ""
+"pen7" 60.0 1 -16777216 true "" ""
+"pen8" 60.0 1 -16777216 true "" ""
+"pen9" 60.0 1 -16777216 true "" ""
+"pen10" 60.0 1 -16777216 true "" ""
+"pen11" 60.0 1 -16777216 true "" ""
+"pen12" 60.0 1 -16777216 true "" ""
 
 SLIDER
 4
@@ -314,6 +319,7 @@ NIL
 R
 NIL
 NIL
+1
 
 MONITOR
 45
@@ -338,23 +344,22 @@ mean [vy] of turtles
 11
 
 @#$#@#$#@
-WHAT IS IT?
------------
+## WHAT IS IT?
+
 This is a model of a physics-based approach to provide a "sweep" of a region.  The goal is to sweep a large group of robots through a long bounded region. This is especially useful for de-mining, searching for survivors after a disaster, and for robot sentries. 
 
 We use a very different form of physicomimetics, based on "kinetic theory." In kinetic theory, particles are treated as possessing no potential energy. The system consists entirely of kinetic energy. In fact, kinetic theory does not typically deal with forces at all. Instead, increases in particle velocity are modeled as being caused by collisions and/or a system temperature increase. This is very different from the F = ma physics systems that we have examined earlier.
- 
+   
 Our region is very simple - it is a vertical corridor. In the model, we treat the left boundary as an infinite-length wall that moves down, whereas the right boundary is an infinite-length wall that moves up. This creates an interesting sweep, where one-half of the corridor is swept in one direction while the other half is swept in the other direction. Chapter 4 discusses this particlar simulation in more detail. Chapter 7 provides a more sophisticated version of the simulator in which both walls move in the same direction and robots are modeled realistically.  Chapter 7 also provides experimental and theoretical results.
 
 Kinetic theory is a stochastic approach.   The focus is on obtaining desirable bulk movement of the swarm. The movements of the individual agents are probabilistic and therefore unpredictable.  This is desirable for applications where stealth is required.
 
-HOW IT WORKS
-------------
+## HOW IT WORKS
+
 If an agent senses another agent nearby, they both respond as if a virtual collision has occurred. If an agent senses a wall nearby, it changes its velocity in response to the virtual motion of the wall.  In addition, the temperature T of the walls adds kinetic energy to the particles.
 
+## HOW TO USE IT
 
-HOW TO USE IT
--------------
 Click SETUP AGENTS to initialize the particles, and click MOVE AGENTS to have them move.
 
 The NUMBER_OF_PARTICLES slider allows you to control the number of particles created at initialization. Changing this slider while the simulation is running will have no effect.
@@ -363,7 +368,7 @@ Two sliders affect the simulation when it is running.  The WALL_VELOCITY slider 
 
 Two monitors show the x- and y-components of the linear momentum. These should remain close to zero because the particles are stationary when initialized, and kinetic theory conserves linear momentum.
 
-A histogram shows the velocity distribution of the particles. The corridor is broken into
+A histogram shows the velocity distribution of the particles. The corridor is broken into  
 13 vertical columns, and the histogram shows 13 bars that indicate the average velocity of the particles in each column. The leftmost bar gives the average velocity in the leftmost column, and the rightmost bar gives the average velocity in the rightmost column.  Since there is an odd number of columns, the central bar reflects the average velocity in the center column.
 
 The velocity distribution is averaged during the running of the simulation.  If you click RESAMPLE, the previous data is thrown away and the averages are (re-)computed using the data accumulated after RESAMPLE is clicked. Hence, the averages will fluctuate until enough new samples are accumulated.
@@ -372,19 +377,17 @@ Two additional monitors give quantitative information about the bars of the hist
 
 Once you understand the behavior of the particles, it is generally a good idea to speed up the simulation by moving the speed slider (at the top) to the right. 
 
+## THINGS TO NOTICE
 
-THINGS TO NOTICE
-----------------
 After running the simulation for a while, what does the histogram look like?   Can you guess why it has this particular form?  Try guessing first, and then read Chapter 4 (or Chapter 7) to find the mathematical formula for the velocity distribution.  
 
 Both the WALL_VELOCITY and the wall TEMPERATURE are controllable by sliders.  These parameters control the bulk movement of the robotic swarm.
 
 Recall that a kinetic theory approach conserves linear momentum.  The book explains how collisions are implemented in a way that ensures this conservation.
 
+## THINGS TO TRY
 
-THINGS TO TRY
--------------
-Trying running the simulation with 100 agents and try running with 1000 agents. What
+Trying running the simulation with 100 agents and try running with 1000 agents. What  
 difference does this make in the behavior?
 
 Change the WALL_VELOCITY. For an extreme case, set it to zero.
@@ -392,14 +395,12 @@ Change the WALL_VELOCITY. For an extreme case, set it to zero.
 Change the TEMPERATURE.
 
 How do these changes (of the WALL_VELOCITY and TEMPERATURE, going from low to high values) affect behavior?  Can you explain the differences in swarm behavior?
-  
+    
 Try a wide variety of parameter settings and see if you can predict how the settings will affect the shape and slope of the histogram.
 
 Figure out which parameter (slider) settings provide better horizontal corridor coverage, and which provide better vertical corridor coverage.   How would you recommend balancing the two?  Can you derive a formula for doing this?
 
-
-EXTENDING THE MODEL
--------------------
+## EXTENDING THE MODEL
 
 Try adding obstacles, including obstacles of difference sizes and shapes.  Observe what happens in the "shadow regions" (see Chapter 7) as you vary the parameters.   Find the best settings for shadow region coverage, and determine how that affects the vertical and horizontal coverage of the corridor.
 
@@ -409,16 +410,13 @@ For a more challenging project, invent a hybrid physicomimetic algorithm consist
 
 In order to change any NetLogo simulation, you must have the source code (i.e., "kt.nlogo") downloaded to your computer, as well as NetLogo itself. You can not change the code when you are running the simulation with your browser.
 
+## NETLOGO FEATURES
 
-NETLOGO FEATURES
-----------------
 The "extensions[array]" command adds the ability to use arrays in NetLogo. An array is used to compute the velocity distribution for the thirteen columns in the environment.
 
 The "do-plot" procedure provides extensive detail on how to create a very useful histogram.
 
-
-CREDITS AND REFERENCES
-----------------------
+## CREDITS AND REFERENCES
 
 Spears, D. F., Kerr, W., and Spears, W. M. (2009) Fluid-like swarms with predictable macroscopic behavior. Lecture Notes in Computer Science, Volume 4324.
 
@@ -428,21 +426,19 @@ Kerr, W. and Spears, D. F. (2005) Robotic simulation of gases for a surveillance
 
 Garcia, A. (2000) Numerical Methods for Physics, Second Edition.  New Jersey: Prentice Hall.  
 
+## HOW TO CITE
 
-HOW TO CITE
------------
-If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:
-- Spears, W. M. and Spears, D. F. (eds.) Physicomimetics: Physics-Based Swarm Intelligence, Springer-Verlag, (2011).
+If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:  
+- Spears, W. M. and Spears, D. F. (eds.) Physicomimetics: Physics-Based Swarm Intelligence, Springer-Verlag, (2011).  
 - Wilensky, U. (1999). NetLogo. http://ccl.northwestern.edu/netlogo/. Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
 
+## COPYRIGHT NOTICE
 
-COPYRIGHT NOTICE
-----------------
 Copyright 2011 William M. Spears. All rights reserved.
 
-Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed: 
-a) this copyright notice is included, and 
-b) this model will not be redistributed for profit without permission from William M. Spears. 
+Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed:   
+a) this copyright notice is included, and   
+b) this model will not be redistributed for profit without permission from William M. Spears.   
 Contact William M. Spears for appropriate licenses for redistribution for profit.
 
 http://www.swarmotics.com
@@ -730,7 +726,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 4.1.3
+NetLogo 5.0
 @#$#@#$#@
 set population 200
 setup

@@ -10,7 +10,6 @@ globals [boundary b1 b2 uhist]                     ; uhist is the uniform distri
 ; Assumes max-pxcor = -min-pxcor, and max-pycor = -min-pycor
 to setup
    clear-all                                       ; Clear everything
-   tick 
    set uhist array:from-list n-values 9 [0]        ; Used to break the environment into nine 3x3 cells
    set boundary (max-pxcor - 2)                    ; Set the boundaries of the cells
    set b1 ((2 * boundary) / 3) - boundary
@@ -21,6 +20,8 @@ to setup
    
    ask patches [setup-patches]                     ; Ask patches to color themselves
    setup-plot                                      ; Initialize the uniform distribution histogram
+   reset-ticks
+   tick
 end
 
 to setup-patches                                   ; Use different colors for the three classes of cells
@@ -112,7 +113,6 @@ to-report uniform                                  ; Compute Euclidean distance 
       [set my_sum my_sum + ((array:item uhist ? / temp) - (1 / 9)) ^ 2]                   
    report sqrt my_sum                              ; See Chapter 4 for details
 end
-
 @#$#@#$#@
 GRAPHICS-WINDOW
 394
@@ -139,6 +139,7 @@ GRAPHICS-WINDOW
 1
 1
 ticks
+30.0
 
 BUTTON
 76
@@ -155,6 +156,7 @@ NIL
 S
 NIL
 NIL
+1
 
 BUTTON
 193
@@ -171,6 +173,7 @@ NIL
 M
 NIL
 NIL
+1
 
 SLIDER
 5
@@ -201,16 +204,17 @@ NIL
 10.0
 true
 false
+"" ""
 PENS
-"pen0" 60.0 1 -13345367 true
-"pen1" 60.0 1 -10899396 true
-"pen2" 60.0 1 -13345367 true
-"pen3" 60.0 1 -10899396 true
-"pen4" 60.0 1 -2674135 true
-"pen5" 60.0 1 -10899396 true
-"pen6" 60.0 1 -13345367 true
-"pen7" 60.0 1 -10899396 true
-"pen8" 60.0 1 -13345367 true
+"pen0" 60.0 1 -13345367 true "" ""
+"pen1" 60.0 1 -10899396 true "" ""
+"pen2" 60.0 1 -13345367 true "" ""
+"pen3" 60.0 1 -10899396 true "" ""
+"pen4" 60.0 1 -2674135 true "" ""
+"pen5" 60.0 1 -10899396 true "" ""
+"pen6" 60.0 1 -13345367 true "" ""
+"pen7" 60.0 1 -10899396 true "" ""
+"pen8" 60.0 1 -13345367 true "" ""
 
 MONITOR
 114
@@ -224,24 +228,22 @@ uniform
 11
 
 @#$#@#$#@
-WHAT IS IT?
------------
+## WHAT IS IT?
+
 This model is an attempt to provide "uniform coverage" of a region.  The goal is to have one or more agents move throughout a region, exploring all parts with equal frequency.
 
 Our region is very simple - it is a square divided into nine "cells." The center cell is colored "red," the corner cells are colored "blue," and the remaining cells are colored "green." The yellow boundary prevents agents from escaping the region.
 
 This is our first attempt, which is a biomimetics approach. Our second approach is in "uniform_mfpl.nlogo."
 
+## HOW IT WORKS
 
-HOW IT WORKS
-------------
 If an agent senses a wall or another agent in front of it, the agent makes a random turn. Otherwise the agent moves forward. This is motivated by similar behaviors used to model termites in NetLogo.
 
 Every time step, if an agent is in a particular cell, a counter for that cell is incremented by one. This records the number of times that cell has been visited. A histogram displays how often all cells have been visited.
 
+## HOW TO USE IT
 
-HOW TO USE IT
--------------
 Click SETUP AGENTS to initialize the particles, and click MOVE AGENTS to have them move.
 
 The NUMBER_OF_PARTICLES slider allows you to control the number of particles created at initialization. Changing this slider while the simulation is running will have no effect.
@@ -252,20 +254,17 @@ A monitor called DEVIATION FROM UNIFORMITY provides a quantitative metric of how
 
 Once you understand the behavior of an agent (or a set of agents), it is generally a good idea to speed up the simulation by moving the speed slider (at the top) to the right. 
 
+## THINGS TO NOTICE
 
-THINGS TO NOTICE
-----------------
 After running the simulation for a while, what does the histogram look like? Does this model favor certain cells over others? If so, why does this occur?
 
+## THINGS TO TRY
 
-THINGS TO TRY
--------------
-Trying running the simulation with one agent and try running with 100 agents. What
+Trying running the simulation with one agent and try running with 100 agents. What  
 difference does this make in the behavior?
 
+## EXTENDING THE MODEL
 
-EXTENDING THE MODEL
--------------------
 How could this model be improved, in terms of achieving better uniform coverage? Try different approaches.
 
 Create a more interesting region (e.g., a rectangle or L-shaped region).
@@ -274,16 +273,13 @@ Create a button to add particles and a button to remove particles (you can get t
 
 Note, in order to change any NetLogo simulation, you must have the source code (i.e., "uniform.nlogo") downloaded to your computer, as well as NetLogo itself. You can not change the code when you are running the simulation with your browser.
 
+## NETLOGO FEATURES
 
-NETLOGO FEATURES
-----------------
 The "extensions[array]" command adds the ability to use arrays in NetLogo. An array is used to maintain the cell counts for the nine cells in the environment.
 
 The "do-plot" procedure provides extensive detail on how to create a very useful histogram, using colored pens.
 
-
-RELATED MODELS
---------------
+## RELATED MODELS
 
 The NetLogo termite model is provided by:
 
@@ -291,29 +287,25 @@ Wilensky, U.: NetLogo termites model (1997).  http://ccl.northwestern.edu/netlog
 
 Our more sophisticated model for uniform coverage is in "uniform_mfpl.nlogo."
 
-
-CREDITS AND REFERENCES
-----------------------
+## CREDITS AND REFERENCES
 
 Maxim, P., and Spears, W. M. (2009) Robotic Uniform Coverage of Arbitrary-Shaped Connected Regions. Carpathian Journal of Electronic and Computer Engineering, 2 (1).
 
 Maxim, P., Spears, W. M., and Spears, D. F. (2009) Robotic chain formations. In Proceedings of the IFAC Workshop on Networked Robotics.
 
+## HOW TO CITE
 
-HOW TO CITE
------------
-If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:
-- Spears, W. M. and Spears, D. F. (eds.) Physicomimetics: Physics-Based Swarm Intelligence, Springer-Verlag, (2011).
+If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:  
+- Spears, W. M. and Spears, D. F. (eds.) Physicomimetics: Physics-Based Swarm Intelligence, Springer-Verlag, (2011).  
 - Wilensky, U. (1999). NetLogo. http://ccl.northwestern.edu/netlogo/. Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
 
+## COPYRIGHT NOTICE
 
-COPYRIGHT NOTICE
-----------------
 Copyright 2011 William M. Spears. All rights reserved.
 
-Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed: 
-a) this copyright notice is included, and 
-b) this model will not be redistributed for profit without permission from William M. Spears. 
+Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed:   
+a) this copyright notice is included, and   
+b) this model will not be redistributed for profit without permission from William M. Spears.   
 Contact William M. Spears for appropriate licenses for redistribution for profit.
 
 http://www.swarmotics.com
@@ -601,7 +593,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 4.1.3
+NetLogo 5.0
 @#$#@#$#@
 set population 200
 setup

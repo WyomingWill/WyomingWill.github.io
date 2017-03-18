@@ -1,113 +1,72 @@
-; William M. Spears September 2011
-; Honeycomb Lattice Using the Split Newtonian Force Law
+; William M. Spears May 2012
+; As per the robot algorithm described on pages 9, 10 and 31 of 
+; "Autonomous Recharging of Swarm Robots" by Jonathan Mullins,
+; Bachelor of Software Engineering thesis from Clayton School 
+; of Information Technology Monash University, June, 2011
+; A crude implementation of Diffusion Limited Aggregation
 ; For research and educational use only
 
-breed [particles particle]                              ; Introduce the "particle" breed
+breed [robots robot]                              ; Introduce the "robot" breed
 
-globals [G p FR D FMAX DeltaT]
-
-turtles-own [hood deltax deltay r F Fx Fy v vx vy dvx dvy mass view square? counter]
+robots-own [done]
 
 to setup
-   clear-all                                            ; Clear everything
-   set p 2 set FMAX 1                                   ; Initialize force parameters
-                                                        ; Create and initialize particles
-   create-particles Number_of_Particles [setup-particles]
-   update-info
+   clear-all                                      ; Clear everything
+   create-robots 1 [setxy 0 0 set done true       ; Create and initialize center robot
+                    set shape "circle" set color white set size 5]
    reset-ticks
 end
 
 to run-and-monitor
-   if (count turtles < 1) [user-message "Please click HALT and then SETUP AGENTS first" stop]
-   update-info
-   ask particles [ap-particles]
-   ask turtles [move]
+   if (count robots < 1) [user-message "Please click HALT and then SETUP AGENTS first" stop]
+   ask robots [move-robots]
    tick
 end
 
-to setup-particles                                      ; Set up the particles
-   set square? false set counter 0
-   setxy (random-normal 0 20) (random-normal 0 20)      ; Start in a cluster
-   set heading random 360                               ; Everyone has a random heading
-   set vx 0 set vy 0 set mass 1                         ; Start with no motion and mass = 1
-   set shape "circle" set size 5
-   ifelse ((who mod 2) = 0) 
-      [set color white] 
-      [set color yellow]                                ; Different colors for honeycomb formations
-end
-
-to ap-particles                                         ; Run artificial physics
-   set Fx 0 set Fy 0                                    ; Initialize force components to zero
-   set vx (1 - FR) * vx                                 ; Slow down according to friction
-   set vy (1 - FR) * vy 
-   let edge false                                       ; Flag to draw honeycomb edge set to false
-   
-   set hood [who] of other particles                    ; Get the IDs of everyone else
-   foreach hood [         
-      if (counter = 0)   [set square? true]             ; Occasionally switch between square and honeycomb
-      if (counter > 100) [set square? false set counter -100]
-      set counter counter + 1
-      set deltax (([xcor] of particle ?) - xcor) 
-      set deltay (([ycor] of particle ?) - ycor) 
-      set r sqrt (deltax * deltax + deltay * deltay)
-
-      ifelse (square?)                                  ; For square lattices
-         [ifelse ((who mod 2) = (? mod 2)) 
-            [set view 1.3 set r (r / (sqrt 2))]
-            [set view 1.7 set edge true]                ; Set edge flag to true
-         ]                                              
-         [ifelse ((who mod 2) = (? mod 2))              ; For honeycomb lattices
-            [set view 1.3 set r (r / (sqrt 3))]
-            [set view 1.7 set edge true]                ; Set edge flag to true
-         ]
-    
-      if (r < view * D) [                             
-         if (edge and (r < 1.1 * D) and (r > 0.9 * D))  ; Draw edge between neighbors
-            [if ((ticks > 200) and (ticks mod 100 = 0)) 
-                [hatch 1 [pd set heading (atan deltax deltay) fd r die]]]
-                                                        ; The generalized split Newtonian law
-         set F (G * mass * ([mass] of turtle ?) / (r ^ p)) 
-         if (F > FMAX) [set F FMAX]                     ; Bounds check on force magnitude
-         ifelse (r > D) 
-            [set Fx (Fx + F * (deltax / r))             ; Attractive force, x-component
-             set Fy (Fy + F * (deltay / r))]            ; Attractive force, y-component
-            [set Fx (Fx - F * (deltax / r))             ; Repulsive force, x-component
-             set Fy (Fy - F * (deltay / r))]            ; Repulsive force, y-component
+to move-robots                           
+   if (not done) [                                ; If not part of structure
+      let friends other robots in-radius Desired_Separation with [color = white]
+      ; If no friends nearby, or too many friends, random walk.
+      ifelse ((count friends < 1) or (count friends > Beta)) [
+         ; Parameterized Random walk
+         set heading heading + (random (2 * Wiggle_Amount) - Wiggle_Amount)
+         fd 1
+         ; If boundary is hit, remove particle from world but create a new one also
+         ifelse ((round xcor) = max-pxcor) [create 1 die]
+            [ifelse ((round xcor) = (0 - max-pxcor)) [create 1 die]
+                [ifelse ((round ycor) = max-pycor) [create 1 die]
+                    [if ((round ycor) = (0 - max-pycor)) [create 1 die]]]]
       ]
-      set edge false
+      [
+         let friend one-of friends                ; If friends nearby
+         let deltax (([xcor] of friend) - xcor) 
+         let deltay (([ycor] of friend) - ycor) 
+         let r sqrt (deltax * deltax + deltay * deltay)
+         ; Create a "virtual" robot with a green pen down to draw the line
+         hatch 1 [pd set color green set heading (atan deltax deltay) fd r die]
+         set done true
+         set color white                          ; Now part of the DLA structure
+      ]
    ]
-   
-   set dvx DeltaT * (Fx / mass)
-   set dvy DeltaT * (Fy / mass)
-   set vx  (vx + dvx)                                   ; The x-component of velocity 
-   set vy  (vy + dvy)                                   ; The y-component of velocity
-   set v sqrt (vx * vx + vy * vy)
-
-   set deltax DeltaT * vx
-   set deltay DeltaT * vy 
-   if ((deltax != 0) or (deltay != 0)) 
-      [set heading (atan deltax deltay)]  
 end
 
-to move                                                 ; Move the particle
-   fd (sqrt (deltax * deltax + deltay * deltay))
+; Create n new robots
+to create [n]
+   ask one-of robots
+      [hatch n [
+           setxy (15 * random-xcor / 16) (15 * random-ycor / 16)
+           set heading (atan (0 - xcor) (0 - ycor))
+           set color yellow set done false
+      ]] 
 end
-
-to update-info                                          ; Update information from the sliders
-   set FR Friction
-   set DeltaT Time_Step
-   set D Desired_Separation
-   set G (FMAX * (D ^ p) / (2 * sqrt(3)))               ; Compute best G from theory!
-end
-
 @#$#@#$#@
 GRAPHICS-WINDOW
-298
-15
-749
-487
-220
-220
+296
+10
+707
+442
+200
+200
 1.0
 1
 10
@@ -115,13 +74,13 @@ GRAPHICS-WINDOW
 1
 1
 0
+0
+0
 1
-1
-1
--220
-220
--220
-220
+-200
+200
+-200
+200
 1
 1
 1
@@ -129,11 +88,11 @@ ticks
 30.0
 
 BUTTON
-8
-15
-111
-48
-Setup Agents
+7
+17
+80
+50
+Setup
 setup
 NIL
 1
@@ -146,11 +105,11 @@ NIL
 1
 
 BUTTON
-115
-15
-222
-48
-Move Agents
+86
+17
+160
+50
+Move
 run-and-monitor
 T
 1
@@ -163,45 +122,58 @@ NIL
 1
 
 SLIDER
-11
-99
-286
-132
-Friction
-Friction
-0
-1.0
-0.5
-0.01
-1
-NIL
-HORIZONTAL
-
-SLIDER
-11
-145
-286
-178
-Time_Step
-Time_Step
-0.01
-1.0
-1
-0.01
-1
-NIL
-HORIZONTAL
-
-SLIDER
-11
-186
-286
-219
+9
+139
+284
+172
 Desired_Separation
 Desired_Separation
+2
 10
-20
-20
+6
+1
+1
+NIL
+HORIZONTAL
+
+BUTTON
+167
+17
+280
+51
+Add 100
+create 100
+NIL
+1
+T
+OBSERVER
+NIL
+A
+NIL
+NIL
+1
+
+MONITOR
+86
+264
+216
+309
+#Robots
+count robots
+3
+1
+11
+
+SLIDER
+8
+86
+282
+119
+Wiggle_Amount
+Wiggle_Amount
+0
+180
+180
 1
 1
 NIL
@@ -209,137 +181,84 @@ HORIZONTAL
 
 SLIDER
 9
-58
-288
-91
-Number_of_Particles
-Number_of_Particles
+194
+284
+227
+Beta
+Beta
 1
-201
-201
 5
+1
+1
 1
 NIL
 HORIZONTAL
 
-MONITOR
-15
-441
-145
-486
-#Particles
-count particles
-3
-1
-11
-
-BUTTON
-225
-15
-287
-48
-Clear
-clear-drawing clear-all-plots clear-patches
-NIL
-1
-T
-OBSERVER
-NIL
-C
-NIL
-NIL
-1
-
-MONITOR
-160
-441
-288
-486
-G Phase Transition
-G
-2
-1
-11
-
 @#$#@#$#@
 ## WHAT IS IT?
 
-This is a modification of the "split Newtonian" (formation_newton.nlogo) physics-based model of a swarm, for the book entitled "Physicomimetics: Physics-Based Swarm Intelligence."
+This is a simulation of diffusion limited aggregation (DLA), based on the description provided by Mullins (2011). According to Mullins, "DLA is a process first discussed in Witten and Meakin (1983), where particles moving about randomly aggregate to form Brownian trees, a type of fractal structure found in nature (e.g. crystal growth, dust coalescence and snow flakes). To clarify the meaning of DLA, diffusion refers to the movement of particles due to temperature fluctuations, limited refers to the increase in size by one particle at a time, and aggregation refers to the collection of particles connected together."
 
 ## HOW IT WORKS
 
-Multiple particles use F = ma and a "split Newtonian" force law to self-organize into a honeycomb lattice.  
+A stationary particle is placed at the center of the graphics pane. This is the start of the DLA structure. You can use a button to introduce more particles. These particles perform a random walk. If a particle gets within a used-specified distance of a particle in the DLA structure it stops moving and is now a part of the DLA structure.
 
-## WHAT IS NEW
-
-As opposed to using two particle types to create a square lattice, the two particle types are used to create a honeycomb lattice. The honeycomb lattice is useful because, for a given separation distance, it provides the maximum area coverage of any regular lattice pattern. See Chapter 3 of the book for details.
-
-The simulation automatically oscillates between a square lattice and a honeycomb lattice, in order to help remove the potential well at the center of each honeycomb cell. Since the honeycomb lattice is larger than the square lattice, the honeycomb cells are stable, whereas the square cells are not. Hence, the honeycomb lattice dominates the behavior.
-
-In addition, the simulation model has been simplified.  The split Newtonian parameter p is set to 2, and the force maximum FMAX is set to 1.  The user can adjust the desired separation distance, and the code automatically computes the proper value for the gravitational constant G, using the theory established in Chapter 3.
+If a particle moves outside the graphics pane boundaries it is moved to a random location within the graphics pane (more precisely it is killed and a new particle is created).
 
 ## HOW TO USE IT
 
-Click SETUP AGENTS to initialize the particles, and click MOVE AGENTS to have them move.
+Click SETUP to initialize the center particle. This particle is white to denote that it is part of the DLA structure.
 
-The CLEAR button will clear the graphics, which becomes handy when particles have their pens down (more on this below).
+Click MOVE to have the simulation start. Note that nothing will happen until the ADD 100 button is clicked. 
 
-The NUMBER_OF_PARTICLES slider allows you to control the number of particles created at initialization. Changing this slider while the simulation is running will have no effect.
+When ADD 100 is clicked 100 particles are randomly placed in the graphics pane. These particles are yellow until they become part of the DLA structure, at which point they become white. The initial heading of each particle is towards the center of the graphics pane.
 
-All other sliders will affect the simulation when it is running.
+Every time step each particle that is not part of the DLA structure performs a parameterized random walk. The parameter is controlled with the WIGGLE_AMOUNT slider. Particles uniformly turn left or right from -WIGGLE_AMOUNT to WIGGLE_AMOUNT degrees. Hence, if WIGGLE_AMOUNT is set to zero, the particles move straight to the center. If WIGGLE_AMOUNT is set to 180, then this is a random walk.
+
+When a particle gets within DESIRED_SEPARATION of a particle in the DLA structure it stops moving and is incorporated into the structure. If there is no particle within distance DESIRED_SEPARATION, the random walk is performed. Similarly, if too many particles are within DESIRED_SEPARATION distance the random walk is performed. The BETA slider controls the number of particles that are considered to be too many.
+
+All the sliders will affect the simulation while yellow particles remain.
 
 ## THINGS TO NOTICE
 
-Particles are initialized in a random cluster in the middle of the graphics pane, and self-organize into a honeycomb lattice.  The lattice is not perfect, but that is OK because we are interested in "satisficing systems," as opposed to "optimal systems."
+If a particle moves to the edge of the graphics pane it dies, but is immediately replaced by a new particle that is randomly placed within the graphics pane. Hence the number of particles remains constant.
 
-The DESIRED_SEPARATION is the desired distance between neighboring particles.
+Usually it is reasonable to press "ADD 100" numerous times to get a sufficient number of particles into the simulation. Roughly 1000 is reasonable.
 
-Again, FRICTION is enabled. This allows the system to stabilize.
-
-Unlike the prior simulations, this model has been simplified by removing the computations of linear and angular momenta.  This speeds up the simulation so that you can run it with a larger number of particles (e.g., 200).
+If the DESIRED_SEPARATION is large enough you will see green lines between pairs of white particles in the DLA structure. This helps to better show the precise structure of the DLA.
 
 ## THINGS TO TRY
 
-See how the FRICTION changes behavior. Click SETUP AGENTS, lower the FRICTION, and click MOVE AGENTS. What happens?
-
-Change the DESIRED_SEPARATION while the system is running. Try changing it slowly and then change it quickly. What happens?
-
-If a particle is in the middle of a honeycomb cell, or some square cells remain, try reducing FRICTION temporarily.
+See how WIGGLE_AMOUNT changes behavior. Similarly, change DESIRED_SEPARATION and BETA.
 
 ## EXTENDING THE MODEL
 
-In this model all particles have the same mass. What happens if particles have different masses? What happens when you change the sensor view (which requires a change in the code)? What other formations can you create by extending the code to include more types of particles?
+Note, in order to change any NetLogo simulation, you must have the source code (i.e., "dla.nlogo") downloaded to your computer, as well as NetLogo itself. You can not change the code when you are running the simulation with your browser.
 
-Add the features and capabilities of the prior simulations to this model.
-
-Note, in order to change any NetLogo simulation, you must have the source code (i.e., "honeycomb.nlogo") downloaded to your computer, as well as NetLogo itself. You can not change the code when you are running the simulation with your browser.
 
 ## NETLOGO FEATURES
 
-This simulation draws edges between neighboring particles by cloning a particle, putting its pen down, and moving it to the neighboring particle.  This is similar to a "virtual particle" in physics, which exists for a limited amount of time.  After the cloned particle has drawn the edge, it dies.  
-
-If the graphics pane becomes too cluttered with drawn edges, click on the "CLEAR" button.
+This simulation makes good use of the "hatch" command, both to re-introduce particles that stray out of the graphics pane, and to draw the green lines between pairs of white particles in the DLA structure.
 
 ## RELATED MODELS
 
-This is a modification to our second physics-based swarm simulation, which uses the generalized split Newtonian force law. 
-
-A different (but related) honeycomb model has been created by James McLurkin of Rice University.  The title of the technical report is given below.
 
 ## CREDITS AND REFERENCES
 
-McLurkin, J.: Hexagonal lattice formation in multi-robot systems. Technical Report, Rice  
-University (2011).
+This code is based on the description of DLA provided by "Autonomous Recharging of Swarm Robots" by Jonathan Mullins, Bachelor of Software Engineering thesis from Clayton School of Information Technology Monash University, June, 2011
+
+Witten, T. A. and Meakin, P. (1983). Diffusion-limited aggregation at multiple growth
+sites, Phys. Rev. B 28(10): 5632-5642.
 
 ## HOW TO CITE
 
 If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:  
-- Spears, W. M. and Spears, D. F. (eds.) Physicomimetics: Physics-Based Swarm Intelligence, Springer-Verlag, (2011).  
+- Spears, William M. (2012) Diffusion Limited Aggregation Algorithm in NetLogo.  
 - Wilensky, U. (1999). NetLogo. http://ccl.northwestern.edu/netlogo/. Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
 
 ## COPYRIGHT NOTICE
 
-Copyright 2011 William M. Spears. All rights reserved.
+Copyright 2012 William M. Spears. All rights reserved.
 
 Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed:  
 a) this copyright notice is included, and  

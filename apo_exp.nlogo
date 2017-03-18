@@ -1,6 +1,7 @@
 ; William M. Spears, September 2011
 ; Artificial Physics Optimization Tutorial Code
 ; For research and educational use only
+; Modified July 20, 2016 for Suranga Hettiarachchi
 
 breed [apo-robots apo-robot]                          ; Introduce the "apo-robot" breed
 globals [center_of_mass_x center_of_mass_y Noise_Level
@@ -89,8 +90,8 @@ to update-apo-robots                                  ; Run artificial physics
             [set Fx (Fx - F * (deltax / r))           ; Repulsive force, x-component
              set Fy (Fy - F * (deltay / r))]          ; Repulsive force, y-component
                                                       ; The modification to AP that performs optimization!
-         ifelse ((rastrigan xcor ycor Noise_Level) <  ; Move towards fitness minimum
-                 (rastrigan ([xcor] of apo-robot ?) 
+         ifelse ((myeval xcor ycor Noise_Level) >     ; Move towards fitness maximum
+                 (myeval ([xcor] of apo-robot ?) 
                             ([ycor] of apo-robot ?) Noise_Level))
             [set Fx (Fx - (apoF * (deltax / r)))      ; Repulsive force, x-component
              set Fy (Fy - (apoF * (deltay / r)))]     ; Repulsive force, y-component
@@ -125,12 +126,13 @@ to update-info                                        ; Update information from 
    ]
 end
 
-to-report rastrigan [x y n]                           ; Computes the Rastrigan function (n = noise level)
+to-report myeval [x y n]                              ; Computes the fitness function (n = noise level)
    set x (x / zoom)
    set y (y / zoom)
-   let tempx ((x - OPTX / zoom) ^ 2 - (10 * cos (360 * (x - OPTX / zoom))) + 10)
-   let tempy ((y - OPTY / zoom) ^ 2 - (10 * cos (360 * (y - OPTY / zoom))) + 10)
-   report (tempx + tempy + (n * ((random-float 1.0) - 0.5)))
+   let temp (0 - ((x - OPTX / zoom) ^ 2) - ((y - OPTY / zoom) ^ 2)) ; Netlogo doesn't deal with unary "-" well.
+   set temp temp / 3200
+   set temp exp temp
+   report (1000 * temp + (n * ((random-float 1.0) - 0.5)))
 end
 
 to zoom-in                                            ; Increase the zoom by a factor of 10
@@ -145,7 +147,7 @@ to reset-zoom                                         ; Reset the zoom back to 1
 end
 
 to calculate-patches                                  ; Calculate the fitness values of the patches
-   ask patches [set fitness (rastrigan pxcor pycor Noise_Level)]
+   ask patches [set fitness (myeval pxcor pycor Noise_Level)]
    let lower min [fitness] of patches                 ; Find the minimum value
    let upper max [fitness] of patches                 ; Find the maximum value
                                                       ; Color the patches shades of yellow, scaled by the min and max
@@ -287,9 +289,9 @@ SLIDER
 Noise
 Noise
 0
-5000000
+5000
 0
-100000
+100
 1
 NIL
 HORIZONTAL
@@ -781,7 +783,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 5.0
+NetLogo 5.0.5
 @#$#@#$#@
 set population 200
 setup
@@ -792,9 +794,9 @@ repeat 200 [ go ]
 @#$#@#$#@
 default
 0.0
--0.2 0 1.0 0.0
+-0.2 0 0.0 1.0
 0.0 1 1.0 0.0
-0.2 0 1.0 0.0
+0.2 0 0.0 1.0
 link direction
 true
 0

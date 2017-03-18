@@ -20,6 +20,7 @@ to setup
    set center_of_mass_y (sum [ycor * mass] of particles) / (sum [mass] of particles)
    ask patch (round center_of_mass_x) (round center_of_mass_y)
       [ask patches in-radius 4 [set pcolor red]]
+   reset-ticks
 end
 
 to run-and-monitor
@@ -156,6 +157,7 @@ GRAPHICS-WINDOW
 1
 1
 ticks
+30.0
 
 BUTTON
 9
@@ -172,6 +174,7 @@ NIL
 S
 NIL
 NIL
+1
 
 BUTTON
 113
@@ -188,6 +191,7 @@ NIL
 M
 NIL
 NIL
+1
 
 SLIDER
 11
@@ -278,10 +282,11 @@ NIL
 10.0
 true
 true
+"" ""
 PENS
-"Lmx" 1.0 0 -2674135 true
-"Lmy" 1.0 0 -10899396 true
-"Angular" 1.0 0 -13345367 true
+"Lmx" 1.0 0 -2674135 true "" ""
+"Lmy" 1.0 0 -10899396 true "" ""
+"Angular" 1.0 0 -13345367 true "" ""
 
 MONITOR
 16
@@ -346,6 +351,7 @@ NIL
 K
 NIL
 NIL
+1
 
 BUTTON
 388
@@ -362,6 +368,7 @@ NIL
 B
 NIL
 NIL
+1
 
 MONITOR
 508
@@ -389,20 +396,19 @@ NIL
 C
 NIL
 NIL
+1
 
 @#$#@#$#@
-WHAT IS IT?
------------
+## WHAT IS IT?
+
 This is our first physics-based model of a swarm, for the book entitled "Physicomimetics: Physics-Based Swarm Intelligence."
 
+## HOW IT WORKS
 
-HOW IT WORKS
-------------
 Multiple particles use F = ma and Hooke's law to self-organize into a triangular lattice.
 
+## HOW TO USE IT
 
-HOW TO USE IT
--------------
 Click SETUP AGENTS to initialize the particles, and click MOVE AGENTS to have them move.
 
 The CLEAR button will clear the graphics, which becomes handy when particles have their pens down (more on this below).
@@ -415,9 +421,8 @@ The KILL ONE button randomly kills an existing particle.
 
 All other sliders will affect the simulation when it is running.
 
+## THINGS TO NOTICE
 
-THINGS TO NOTICE
-----------------
 Particles are initialized in a random cluster in the middle of the graphics pane, and self-organize into a triangular lattice.  The lattice is not perfect, but that is OK because we are interested in "satisficing systems," as opposed to "optimal systems."
 
 The SPRING_CONSTANT controls the stiffness of the springs that connect all pairs of particles that are within sensor range.  The DESIRED_SEPARATION is the same as the desired spring length between particles.
@@ -432,8 +437,8 @@ This model allows you to add and remove particles.  Removing particles allows yo
 
 Although it doesn't look like the linear momentum is shown on the graph, this is because it is overdrawn by the angular momentum curve. If you slow the simulation down (with the speed slider) and add a particle, you will usually see all three curves.
 
-THINGS TO TRY
--------------
+## THINGS TO TRY
+
 See how the FRICTION changes behavior. Click SETUP AGENTS, lower the friction, and click MOVE AGENTS. What happens?  
 
 Similarly, change the SPRING_CONSTANT.
@@ -444,9 +449,8 @@ Add and remove particles.
 
 Set the NUMBER_OF_PARTICLES to five and maximize the other sliders (slide them to the right). Also, increase the speed with the speed slider at the top of the simulation. What happens? Why does it happen? You may need to try this a couple of times to get a connected formation with all five particles. What if only four particles are used?
 
+## EXTENDING THE MODEL
 
-EXTENDING THE MODEL
--------------------
 In this model all particles have the same mass. What happens if particles have different masses? 
 
 What happens when you change the sensor view?
@@ -456,38 +460,32 @@ What happens if you change the force law?
 Note, in order to change any NetLogo simulation, you must have the source code (i.e., "formation_hooke.nlogo") downloaded to your computer, as well as NetLogo itself. You can not change the code when you are running the simulation with your browser.
 
 
+## NETLOGO FEATURES
 
-NETLOGO FEATURES
-----------------
 This simulation allows the user to create new particles and kill existing ones. 
 
 Killing a particle is accomplished via a call to the NetLogo procedure "die." 
 
 To create a particle, the "hatch" command is used - this clones an existing particle and moves it away from the original.  Also, the new particle has the "pen down," which means that you will see the path that the particle takes.  If the graphics pane becomes too busy, click on the CLEAR button.
 
+## RELATED MODELS
 
-RELATED MODELS
---------------
 This is our first physics-based swarm simulation.  However, it builds naturally on our early two-particle physics models from Chapter 2.
 
+## CREDITS AND REFERENCES
 
-CREDITS AND REFERENCES
-----------------------
+## HOW TO CITE
 
-
-HOW TO CITE
------------
-If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:
-- Spears, William M. and Spears, Diana F. (eds.) Physicomimetics: Physics-Based Swarm Intelligence, Springer-Verlag, (2011).
+If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:  
+- Spears, William M. and Spears, Diana F. (eds.) Physicomimetics: Physics-Based Swarm Intelligence, Springer-Verlag, (2011).  
 - Wilensky, U. (1999). NetLogo. http://ccl.northwestern.edu/netlogo/. Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
 
+## COPYRIGHT NOTICE
 
-COPYRIGHT NOTICE
-----------------
 Copyright 2011 William M. Spears. All rights reserved.
 
-Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed:
-a) this copyright notice is included, and
+Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed:  
+a) this copyright notice is included, and  
 b) this model will not be redistributed for profit without permission from William M. Spears. Contact William M. Spears for appropriate licenses for redistribution for profit.
 
 http://www.swarmotics.com
@@ -775,7 +773,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 4.1.3
+NetLogo 5.0
 @#$#@#$#@
 set population 200
 setup

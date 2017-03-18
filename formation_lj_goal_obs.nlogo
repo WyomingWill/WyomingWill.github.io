@@ -37,6 +37,7 @@ to setup
    set center_of_mass_y (sum [ycor * mass] of objects) / (sum [mass] of objects)
    ask patch (round center_of_mass_x) (round center_of_mass_y)
       [ask patches in-radius 4 [set pcolor red]]
+   reset-ticks
 end
 
 to run_and_monitor
@@ -308,6 +309,7 @@ GRAPHICS-WINDOW
 1
 1
 ticks
+30.0
 
 BUTTON
 8
@@ -324,6 +326,7 @@ NIL
 S
 NIL
 NIL
+1
 
 BUTTON
 115
@@ -340,6 +343,7 @@ NIL
 M
 NIL
 NIL
+1
 
 SLIDER
 12
@@ -430,10 +434,11 @@ NIL
 10.0
 true
 true
+"" ""
 PENS
-"Lmx" 1.0 0 -2674135 true
-"Lmy" 1.0 0 -10899396 true
-"Angular" 1.0 0 -13345367 true
+"Lmx" 1.0 0 -2674135 true "" ""
+"Lmy" 1.0 0 -10899396 true "" ""
+"Angular" 1.0 0 -13345367 true "" ""
 
 MONITOR
 733
@@ -498,6 +503,7 @@ NIL
 K
 NIL
 NIL
+1
 
 BUTTON
 384
@@ -514,6 +520,7 @@ NIL
 B
 NIL
 NIL
+1
 
 MONITOR
 504
@@ -541,6 +548,7 @@ NIL
 C
 NIL
 NIL
+1
 
 SLIDER
 10
@@ -572,6 +580,7 @@ NIL
 F
 NIL
 NIL
+1
 
 BUTTON
 881
@@ -588,6 +597,7 @@ NIL
 G
 NIL
 NIL
+1
 
 SLIDER
 13
@@ -619,6 +629,7 @@ NIL
 D
 NIL
 NIL
+1
 
 MONITOR
 506
@@ -679,27 +690,24 @@ square_button?
 11
 
 @#$#@#$#@
-WHAT IS IT?
------------
+## WHAT IS IT?
+
 This is a modification of our third physics-based model of a swarm, for the book entitled "Physicomimetics: Physics-Based Swarm Intelligence." This simulation uses a force law based on the Lennard-Jones potential, rather than the split Newtonian force law.
 
+## HOW IT WORKS
 
-HOW IT WORKS
-------------
 Multiple particles use F = ma and a generalized Lennard-Jones force law to self-organize into a triangular lattice or a square lattice. 
 
 A goal provides an attractive force and obstacles provide a repulsive force.
 
+## WHAT IS NEW
 
-WHAT IS NEW
------------
 This simulation modifies "formation_goal_obs.nlogo" by using a generalized Lennard-Jones force law rather than the split Newtonian force law.  
 
 This force law is very robust - the formation acts more like a viscous fluid than a solid formation.  Hence we have found that it generally performs the obstacle avoidance task extremely well (see reference below).
 
+## HOW TO USE IT
 
-HOW TO USE IT
--------------
 Click SETUP AGENTS to initialize the particles, and click MOVE AGENTS to have them move.
 
 The CLEAR button will clear the graphics, which becomes handy when particles have their pens down (more on this below).
@@ -720,9 +728,8 @@ Obstacles can be placed in the environment by placing the mouse where you want t
 
 All other sliders will affect the simulation when it is running.
 
+## THINGS TO NOTICE
 
-THINGS TO NOTICE
-----------------
 Particles are initialized in a random cluster at the right of the graphics pane, and self-organize into a triangular lattice. The lattice is not perfect, but that is OK because we are interested in "satisficing systems," as opposed to "optimal systems."
 
 The LENNARD_JONES_CONSTANT controls a multiplicative parameter in the Lennard-Jones force. The POWER controls the value of "p" in the generalized law. The DESIRED_SEPARATION is the desired distance between neighboring particles. For more details on this force law, see Chapter 14 of the book.
@@ -737,9 +744,8 @@ This model allows you to add and remove particles. Removing particles allows you
 
 Similarly, turning the goal force on and off, as well as adding obstacles, opens the system. The center of mass will move when this happens.
 
+## THINGS TO TRY
 
-THINGS TO TRY
--------------
 See how the FRICTION changes behavior. Click SETUP AGENTS, lower the friction, and click MOVE AGENTS.  What happens?  
 
 Similarly, change the LENNARD_JONES_CONSTANT or the POWER.
@@ -747,13 +753,13 @@ Similarly, change the LENNARD_JONES_CONSTANT or the POWER.
 Change the DESIRED_SEPARATION while the system is running. Try changing it slowly and then change it quickly. What happens?
 
 Add and remove particles. After you add a particle, turn on the goal force. Since the pen will be down on the newly added particle, you can watch the trajectory as it moves.
- 
+   
 Try different obstacle courses.  Increase the number of obstacles and increase the size of the obstacles. What happens?
 
 In "formation_hooke.nlogo" we noted that unusual behavior can occur with certain parameter settings.  Try similar settings with this simulation (which uses the Lennard-Jones force law). Do you see the same behavior? 
 
-EXTENDING THE MODEL
--------------------
+## EXTENDING THE MODEL
+
 Currently all obstacles in one environment have the same size. Modify the code to allow each obstacle to have a different unique size.
 
 Try having multiple goals. What happens?
@@ -762,9 +768,8 @@ Particles can still cluster when using the Lennard-Jones force law.  Derive a ma
 
 Note, in order to change any NetLogo simulation, you must have the source code (i.e., "formation_lj_goal_obs.nlogo") downloaded to your computer, as well as NetLogo itself. You can not change the code when you are running the simulation with your browser.
 
+## NETLOGO FEATURES
 
-NETLOGO FEATURES
-----------------
 This simulation allows the user to create new particles and kill existing ones.
 
 Killing a particle is accomplished via a call to the NetLogo procedure "die."
@@ -773,34 +778,30 @@ To create a particle, the "hatch" command is used - this clones an existing part
 
 This simulation makes use of NetLogo mouse events to allow the user to place obstacles in the environment.
 
+## RELATED MODELS
 
-RELATED MODELS
---------------
 This is a modification of our third physics-based swarm simulation.  
 
+## CREDITS AND REFERENCES
 
-CREDITS AND REFERENCES
-----------------------
 For details on our first implementation of the Lennard-Jones force law:
 
 Hettiarachchi, S. and W. M. Spears (2005) Moving swarm formations through obstacle fields. In International Conference on Artificial Intelligence, Volume 1, pp. 97-103, CSREA Press.
 
 * The video "odm.avi" shows our testing of an Obstacle Detection Module for our more complex robots. *
 
+## HOW TO CITE
 
-HOW TO CITE
------------
-If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:
-- Spears, W. M. and Spears, D. F. (eds.) Physicomimetics: Physics-Based Swarm Intelligence, Springer-Verlag, (2011).
+If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:  
+- Spears, W. M. and Spears, D. F. (eds.) Physicomimetics: Physics-Based Swarm Intelligence, Springer-Verlag, (2011).  
 - Wilensky, U. (1999). NetLogo. http://ccl.northwestern.edu/netlogo/. Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
 
+## COPYRIGHT NOTICE
 
-COPYRIGHT NOTICE
-----------------
 Copyright 2011 William M. Spears. All rights reserved.
 
-Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed:
-a) this copyright notice is included, and
+Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed:  
+a) this copyright notice is included, and  
 b) this model will not be redistributed for profit without permission from William M. Spears. Contact William M. Spears for appropriate licenses for redistribution for profit.
 
 http://www.swarmotics.com
@@ -1088,7 +1089,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 4.1.3
+NetLogo 5.0
 @#$#@#$#@
 set population 200
 setup

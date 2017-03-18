@@ -107,6 +107,7 @@ to setup
   setup-scouts  ;;scouts setup
   setup-turtles  ;;setup for all the types of robots (other robots than the scouts could be added in the future)
   setup-patches
+  reset-ticks
 end
 
 to go
@@ -612,6 +613,7 @@ GRAPHICS-WINDOW
 1
 1
 ticks
+30.0
 
 BUTTON
 23
@@ -628,6 +630,7 @@ NIL
 NIL
 NIL
 NIL
+1
 
 BUTTON
 24
@@ -644,6 +647,7 @@ NIL
 NIL
 NIL
 NIL
+1
 
 SLIDER
 172
@@ -675,6 +679,7 @@ NIL
 NIL
 NIL
 NIL
+1
 
 SLIDER
 376
@@ -721,6 +726,7 @@ NIL
 NIL
 NIL
 NIL
+1
 
 TEXTBOX
 198
@@ -904,58 +910,62 @@ NIL
 HORIZONTAL
 
 @#$#@#$#@
-WHAT IS IT?
+## WHAT IS IT?
+
 This program shows a group of robots creating five different deployments: Hexagonal, Square, Line, Star and Tree.
 
-HOW IT WORKS
-A group of robots, depicted as square of 7cm, moves through an arena of 2x2 m^2. Different deployment can be tested, so as different cohordination properties.
+## HOW IT WORKS
+
+A group of robots, depicted as square of 7cm, moves through an arena of 2x2 m^2. Different deployment can be tested, so as different cohordination properties.  
 The robot interact using two type of forces: the Artificial Physics and the force from Local Oriented Potential Fields (a potential field centered on each robot of the simulation and affecting its neighbors).
- 
-HOW TO USE IT
+   
+## HOW TO USE IT
+
 SETUP sets up the model according to the values indicated by all the sliders and the switch. GO is a forever button that executes the model continually. Press the Add robot button and click on the arena to add a robot in the selected point.
 
-Basic Inputs:
-- Number_Of_Robots affects the initial set of robots. 
+Basic Inputs:  
+- Number_Of_Robots affects the initial set of robots.   
 - Deployment decides which deployment the robots will assume.
 
-Force Parameters:
-- G_Force represents the Gravitational constant of the Newton's Law of Universal Gravitation (used by the Artificial Physics paradigm)
-- LOPF_Force represents the force arising from the Local Oriented Potential Fields paradigm
-- R represents the radius of the Newton's Law of Universal Gravitation (used by the Artificial Physics paradigm)
+Force Parameters:  
+- G_Force represents the Gravitational constant of the Newton's Law of Universal Gravitation (used by the Artificial Physics paradigm)  
+- LOPF_Force represents the force arising from the Local Oriented Potential Fields paradigm  
+- R represents the radius of the Newton's Law of Universal Gravitation (used by the Artificial Physics paradigm)  
 - Homing_Force affects the force attracting the robots to their home (either the center of the arena, the leader or the barycenter)
 
-Coordination Flags:
-- Aggregation lets the aggregation behavior between the robots be not active (0) or active (1)
-- Dispersion lets the dispersion behavior between the robots be not active (0) or active (1)
+Coordination Flags:  
+- Aggregation lets the aggregation behavior between the robots be not active (0) or active (1)  
+- Dispersion lets the dispersion behavior between the robots be not active (0) or active (1)  
 - Homing lets the dispersion behavior between the robots be not active (0) or active (1)
 
-Deployment Properties:
-- Angle can be used to change the angle between the robots when they are deployed in the Star and the Tree deployment (while changing it, give time to the robots to re-assemble!)
-- Max_level corresponds to the maximum number of raws composing the Tree deployment (try to change its value to avoid robots getting stucked in local optima)
-- Noise_level affects the level of noise disturbing the movements of the robots
+Deployment Properties:  
+- Angle can be used to change the angle between the robots when they are deployed in the Star and the Tree deployment (while changing it, give time to the robots to re-assemble!)  
+- Max_level corresponds to the maximum number of raws composing the Tree deployment (try to change its value to avoid robots getting stucked in local optima)  
+- Noise_level affects the level of noise disturbing the movements of the robots  
 - Halo shows the detection radius of the robots (represents the range of the proximity sensors)
 
 This model has been constructed so that all changes in the sliders and switches will take effect in the model during execution. So, while the GO button is still down, you can change the values of the sliders and the switch, and you can see these changes immediately in the view.
- 
-THINGS TO KNOW
+   
+## THINGS TO KNOW
+
 The Star and the Tree deployments make use of a routine assigning a level to each robot depending on their position (angle and distance) respect to the Leader. The Leader is the robot in black, and by definition is not affected by any force. Each level corresponds to a different color.
 
-THINGS TO TRY
+## THINGS TO TRY
+
 Study how different initial position of the robots affect the deployment. For instance, try to start with a certain number of robots and then add some others through the Add robots button while the simulation is running. Then, compare the perfomance when you use as initial position another deployment. For instance, wait for the robots to deploy as an hexagon and then call the star deployment. Which is the best way to start the deployment?
 
-HOW TO CITE
------------
-If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:
-- Spears, W. M. and Spears, D. F. (eds.) Physics-based Swarm Intelligence: From Theory to Practice, Springer-Verlag, (2011).
+## HOW TO CITE
+
+If you mention this model in an academic publication, we ask that you include these citations for the model itself and for the NetLogo software:  
+- Spears, W. M. and Spears, D. F. (eds.) Physics-based Swarm Intelligence: From Theory to Practice, Springer-Verlag, (2011).  
 - Wilensky, U. (1999). NetLogo. http://ccl.northwestern.edu/netlogo/. Center for Connected Learning and Computer-Based Modeling, Northwestern University, Evanston, IL.
 
+## COPYRIGHT NOTICE
 
-COPYRIGHT NOTICE
-----------------
 Copyright 2011 Andrea Bravi. All rights reserved.
 
-Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed:
-a) this copyright notice is included.
+Permission to use, modify or redistribute this model is hereby granted, provided that both of the following requirements are followed:  
+a) this copyright notice is included.  
 b) this model will not be redistributed for profit without permission from Andrea Bravi. Contact Andrea Bravi for appropriate licenses for redistribution for profit.
 
 http://aix2.uottawa.ca/~abrav103/
@@ -1321,7 +1331,7 @@ Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
 
 @#$#@#$#@
-NetLogo 4.1.3
+NetLogo 5.0
 @#$#@#$#@
 @#$#@#$#@
 @#$#@#$#@
