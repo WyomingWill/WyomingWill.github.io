@@ -1,0 +1,18 @@
+
+For my code:
+
+https://github.com/WyomingWill/WyomingWill.github.io
+or
+https://github.com/WyomingWill
+
+URL for the browser, as an example:
+
+    https://wyomingwill.github.io/uniform.html
+
+Commands when make a change in my project directory at:
+
+/home/wspears/projects/APgit/WyomingWill.github.io
+
+git add --all
+git commit -m "Initial commit"
+git push -u origin master
