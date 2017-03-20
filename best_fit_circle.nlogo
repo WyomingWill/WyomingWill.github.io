@@ -13,14 +13,14 @@ turtles-own [hood deltax deltay r F Fx Fy v vx vy dvx dvy mass]
 
 to setup
    clear-all                                          ; Clear everything
-   create-particles 1 [setup-particles]               ; Setup only one particle                                           
+   create-particles 1 [setup-particles]               ; Setup only one particle
    reset-ticks
 end
 
 ; Note, the code can be modified for an arbitrary number of moving particles,
 ; but for this application we only need one.
 to setup-particles                                    ; Set up the particles
-   setxy (random-normal 0 10) 
+   setxy (random-normal 0 10)
          (random-normal 0 10)                         ; Start near the center
    set heading random 360                             ; Everyone has a random heading
    set vx 0 set vy 0 set mass 1                       ; Start with no motion and mass = 1
@@ -33,11 +33,11 @@ to run-and-monitor
    if ((count fixed_points) > 0) [
       ask fixed_points [compute_distance]             ; Compute r
       set ave_dist mean [r] of fixed_points           ; Compute mean r
-   
+
       ask particles [ap-particles]
       ; Display circle of average radius around particle
       ask particles [draw-circle who (round xcor) (round ycor) (round ave_dist)]
-         
+
       ; Computes center of mass and displays location
       set center_of_mass_x (sum [xcor * mass] of fixed_points) / (sum [mass] of fixed_points)
       set center_of_mass_y (sum [ycor * mass] of fixed_points) / (sum [mass] of fixed_points)
@@ -46,14 +46,14 @@ to run-and-monitor
       ; Graph the plot
       do-plots
    ]
-   
+
    ; Use mouse click to create fixed_points. Must make sure that mouse is within black graphics pane.
    if (mouse-down? and mouse-inside?) [
-      ifelse ((count fixed_points) = 0) 
-          [create-fixed_points 1 [setxy mouse-xcor mouse-ycor set vx 0 set vy 0 set shape "circle" 
+      ifelse ((count fixed_points) = 0)
+          [create-fixed_points 1 [setxy mouse-xcor mouse-ycor set vx 0 set vy 0 set shape "circle"
                                   set size 10 set mass 1 set color green]]
           [ask one-of fixed_points [hatch 1 [setxy mouse-xcor mouse-ycor]]]
-      wait 0.2                                        ; Pause so don't get a bunch of fixed_points at once
+      ;wait 0.2                                        ; Pause so don't get a bunch of fixed_points at once
    ]
 
    tick
@@ -67,9 +67,9 @@ end
 
 to compute_distance                                   ; Compute distance of particle to the fixed_points
    set hood [who] of particles                        ; Get the IDs of all particles
-   foreach hood [         
-      set deltax (([xcor] of particle ?) - xcor) 
-      set deltay (([ycor] of particle ?) - ycor) 
+   foreach hood [ [?1] ->
+      set deltax (([xcor] of particle ?1) - xcor)
+      set deltay (([ycor] of particle ?1) - ycor)
       set r sqrt (deltax * deltax + deltay * deltay)  ; Compute the distance to each particle
    ]
 end
@@ -77,18 +77,18 @@ end
 to ap-particles                                       ; Run artificial physics on the particle
    set Fx 0 set Fy 0                                  ; Initialize force components to zero
    set vx (1 - Friction) * vx                         ; Slow down according to friction
-   set vy (1 - Friction) * vy 
+   set vy (1 - Friction) * vy
 
    set hood [who] of fixed_points                     ; Get the IDs of the fixed_points
-   foreach hood [         
-      set deltax (([xcor] of fixed_point ?) - xcor) 
-      set deltay (([ycor] of fixed_point ?) - ycor) 
-      set r ([r] of fixed_point ?)                    ; No need to recompute r
+   foreach hood [ [?1] ->
+      set deltax (([xcor] of fixed_point ?1) - xcor)
+      set deltay (([ycor] of fixed_point ?1) - ycor)
+      set r ([r] of fixed_point ?1)                    ; No need to recompute r
       set F (ave_dist - r) * Spring_Constant          ; Simple linear force law
       set Fx (Fx - (F * (deltax / r)))                ; Repulsive force, x-component
       set Fy (Fy - (F * (deltay / r)))                ; Repulsive force, y-component
    ]
-     
+
    set dvx Time_Step * (Fx / mass)
    set dvy Time_Step * (Fy / mass)
    set vx  (vx + dvx)                                 ; The x-component of velocity
@@ -96,10 +96,10 @@ to ap-particles                                       ; Run artificial physics o
    set v sqrt (vx * vx + vy * vy)
 
    set deltax Time_Step * vx
-   set deltay Time_Step * vy 
-   if ((deltax != 0) or (deltay != 0)) 
+   set deltay Time_Step * vy
+   if ((deltax != 0) or (deltay != 0))
       [set heading (atan deltax deltay)]
-   fd sqrt (deltax * deltax + deltay * deltay)        ; Move the particle  
+   fd sqrt (deltax * deltax + deltay * deltay)        ; Move the particle
 end
 
 to do-plots
@@ -108,16 +108,14 @@ to do-plots
    plot ave_dist                                      ; Plot the average radius
 end
 
-
-  
 @#$#@#$#@
 GRAPHICS-WINDOW
 407
 53
-818
-485
-200
-200
+816
+463
+-1
+-1
 1.0
 1
 10
@@ -139,10 +137,10 @@ ticks
 30.0
 
 BUTTON
-58
-59
-161
-92
+61
+36
+164
+69
 Setup Agents
 setup
 NIL
@@ -156,10 +154,10 @@ NIL
 1
 
 BUTTON
-165
-59
-272
-92
+168
+36
+275
+69
 Move Agents
 run-and-monitor
 T
@@ -173,10 +171,10 @@ NIL
 1
 
 SLIDER
-60
-108
-335
-141
+63
+85
+338
+118
 Spring_Constant
 Spring_Constant
 0
@@ -188,10 +186,10 @@ NIL
 HORIZONTAL
 
 SLIDER
-59
-151
-334
-184
+62
+128
+337
+161
 Friction
 Friction
 0
@@ -203,25 +201,25 @@ NIL
 HORIZONTAL
 
 SLIDER
-59
-196
-334
-229
+62
+173
+337
+206
 Time_Step
 Time_Step
 0.01
 1.0
-1
+1.0
 0.01
 1
 NIL
 HORIZONTAL
 
 PLOT
-13
-298
-373
-485
+16
+275
+376
+462
 Average Radius
 Time
 NIL
@@ -236,10 +234,10 @@ PENS
 "Ave Radius" 1.0 0 -2674135 true "" ""
 
 BUTTON
-275
-59
-337
-92
+278
+36
+340
+69
 Clear
 clear-drawing clear-all-plots clear-patches
 NIL
@@ -263,10 +261,10 @@ After clicking \"Move Agents\", move the mouse into the black \ngraphics pane an
 1
 
 MONITOR
-141
-244
-243
-289
+144
+221
+246
+266
 #Fixed Points
 count fixed_points
 17
@@ -648,9 +646,8 @@ false
 0
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
-
 @#$#@#$#@
-NetLogo 5.0
+NetLogo 6.0
 @#$#@#$#@
 set population 200
 setup
@@ -661,15 +658,14 @@ repeat 200 [ go ]
 @#$#@#$#@
 default
 0.0
--0.2 0 1.0 0.0
+-0.2 0 0.0 1.0
 0.0 1 1.0 0.0
-0.2 0 1.0 0.0
+0.2 0 0.0 1.0
 link direction
 true
 0
 Line -7500403 true 150 150 90 180
 Line -7500403 true 150 150 210 180
-
 @#$#@#$#@
 0
 @#$#@#$#@

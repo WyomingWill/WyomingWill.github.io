@@ -13,7 +13,7 @@ turtles-own [hood deltax deltay r F Fx Fy v vx vy dvx dvy mass ave_dist]
 
 to setup
    clear-all                                              ; Clear everything
-   create-particles Number_of_Particles [setup-particles] ; Create the particles                                           
+   create-particles Number_of_Particles [setup-particles] ; Create the particles
    reset-ticks
 end
 
@@ -26,26 +26,26 @@ end
 
 to run-and-monitor
    if ((count turtles) < 1) [user-message "Please click HALT and then SETUP AGENTS first" stop]
-   
+
    if ((count fixed_points) > 0) [
       ask particles [ap-particles]
       ; Display circle of average radius around particle
-      ask particles [draw-circle who (round xcor) (round ycor) (round ave_dist)] 
-      
+      ask particles [draw-circle who (round xcor) (round ycor) (round ave_dist)]
+
       ; Computes center of mass and displays location
       set center_of_mass_x (sum [xcor * mass] of fixed_points) / (sum [mass] of fixed_points)
       set center_of_mass_y (sum [ycor * mass] of fixed_points) / (sum [mass] of fixed_points)
       ask patch (round center_of_mass_x) (round center_of_mass_y)
          [ask patches in-radius 4 [set pcolor red]]
    ]
-    
+
    ; Use mouse click to create fixed_points. Must make sure that mouse is within black graphics pane.
    if (mouse-down? and mouse-inside?) [
-      ifelse ((count fixed_points) = 0) 
-          [create-fixed_points 1 [setxy mouse-xcor mouse-ycor set vx 0 set vy 0 set shape "circle" 
+      ifelse ((count fixed_points) = 0)
+          [create-fixed_points 1 [setxy mouse-xcor mouse-ycor set vx 0 set vy 0 set shape "circle"
                                   set size 10 set mass 1 set color green]]
           [ask one-of fixed_points [hatch 1 [setxy mouse-xcor mouse-ycor]]]
-      wait 0.2                                            ; Pause so don't get a bunch of fixed_points at once
+      ;wait 0.2                                            ; Pause so don't get a bunch of fixed_points at once
    ]
 
    tick
@@ -60,26 +60,26 @@ end
 to ap-particles                                           ; Run artificial physics on the particles
    set Fx 0 set Fy 0                                      ; Initialize force components to zero
    set vx (1 - Friction) * vx                             ; Slow down according to friction
-   set vy (1 - Friction) * vy 
+   set vy (1 - Friction) * vy
    set ave_dist 0
-   
+
    set hood [who] of fixed_points                         ; Get the IDs of fixed_points
-   foreach hood [         
-      set deltax (([xcor] of fixed_point ?) - xcor) 
-      set deltay (([ycor] of fixed_point ?) - ycor) 
+   foreach hood [ [?1] ->
+      set deltax (([xcor] of fixed_point ?1) - xcor)
+      set deltay (([ycor] of fixed_point ?1) - ycor)
       set ave_dist ave_dist + sqrt (deltax * deltax + deltay * deltay)
    ]
    set ave_dist (ave_dist / (count fixed_points))         ; Compute average distance
 
-   foreach hood [ 
-      set deltax (([xcor] of fixed_point ?) - xcor) 
-      set deltay (([ycor] of fixed_point ?) - ycor)
+   foreach hood [ [?1] ->
+      set deltax (([xcor] of fixed_point ?1) - xcor)
+      set deltay (([ycor] of fixed_point ?1) - ycor)
       set r sqrt (deltax * deltax + deltay * deltay)      ; Compute the distance to each particle
       set F (ave_dist - r) * Spring_Constant              ; Simple linear force law
       set Fx (Fx - (F * (deltax / r)))                    ; Repulsive force, x-component
       set Fy (Fy - (F * (deltay / r)))                    ; Repulsive force, y-component
    ]
-     
+
    set dvx Time_Step * (Fx / mass)
    set dvy Time_Step * (Fy / mass)
    set vx  (vx + dvx)                                     ; The x-component of velocity
@@ -87,19 +87,19 @@ to ap-particles                                           ; Run artificial physi
    set v sqrt (vx * vx + vy * vy)
 
    set deltax Time_Step * vx
-   set deltay Time_Step * vy 
-   if ((deltax != 0) or (deltay != 0)) 
+   set deltay Time_Step * vy
+   if ((deltax != 0) or (deltay != 0))
       [set heading (atan deltax deltay)]
-   fd sqrt (deltax * deltax + deltay * deltay)            ; Move the particle  
+   fd sqrt (deltax * deltax + deltay * deltay)            ; Move the particle
 end
 @#$#@#$#@
 GRAPHICS-WINDOW
 407
 53
-818
-485
-200
-200
+816
+463
+-1
+-1
 1.0
 1
 10
@@ -193,7 +193,7 @@ Time_Step
 Time_Step
 0.01
 1.0
-1
+1.0
 0.01
 1
 NIL
@@ -235,7 +235,7 @@ Number_of_Particles
 Number_of_Particles
 1
 10
-5
+5.0
 1
 1
 NIL
@@ -623,9 +623,8 @@ false
 0
 Polygon -7500403 true true 270 75 225 30 30 225 75 270
 Polygon -7500403 true true 30 75 75 30 270 225 225 270
-
 @#$#@#$#@
-NetLogo 5.0
+NetLogo 6.0
 @#$#@#$#@
 set population 200
 setup
@@ -636,15 +635,14 @@ repeat 200 [ go ]
 @#$#@#$#@
 default
 0.0
--0.2 0 1.0 0.0
+-0.2 0 0.0 1.0
 0.0 1 1.0 0.0
-0.2 0 1.0 0.0
+0.2 0 0.0 1.0
 link direction
 true
 0
 Line -7500403 true 150 150 90 180
 Line -7500403 true 150 150 210 180
-
 @#$#@#$#@
 0
 @#$#@#$#@
